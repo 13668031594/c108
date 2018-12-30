@@ -161,12 +161,12 @@ class IndexController extends \app\http\controller\IndexController
     {
         $result = $this->class->withdraw_list();
 
-        if (!empty(input('page'))){
+        if (!empty(input('page'))) {
 
             return parent::tables($result);
         }
 
-        return parent::view('withdraw_list',$result);
+        return parent::view('withdraw_list', $result);
     }
 
     //报单详情
@@ -175,5 +175,33 @@ class IndexController extends \app\http\controller\IndexController
         $result = $this->class->goods_info();
 
         return parent::view('goods-details', $result);
+    }
+
+    public function welfare()
+    {
+        $id = input('id');
+
+        if (empty($id)) {
+
+            $result = $this->class->welfare();
+
+            return parent::view('welfare', $result);
+        } else {
+
+            $result = $this->class->welfare_info();
+            return parent::view('welfare-details', $result);
+        }
+    }
+
+    public function welfare_list()
+    {
+        $result = $this->class->welfare_list();
+
+        if (!empty(input('page'))) {
+
+            return parent::tables($result);
+        }
+
+        return parent::view('welfare_list', $result);
     }
 }

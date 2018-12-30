@@ -77,6 +77,9 @@ Route::get('index/withdraw', 'index/Index/withdraw');//提现
 Route::post('index/withdraw', 'index/Assetchange/withdraw');//提现
 Route::get('index/goods', 'index/Index/goods');//产品详情
 Route::get('index/withdraw-list','index/Index/withdraw_list');//提现页面
+Route::get('index/welfare-list','index/Index/welfare_list');//领奖记录页面
+Route::get('index/welfare','index/Index/welfare');//福利奖列表
+Route::post('index/welfare','index/Assetchange/welfare');//申请领奖
 
 //个人中心
 Route::get('index/personal', 'index/Personal/personal');

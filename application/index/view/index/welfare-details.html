@@ -1,0 +1,82 @@
+{include file="index@Index/header"}
+
+<body style="background: #f4f4f4;">
+<!-- 顶部 -->
+<div id="header">
+    <div class="header-left">
+        <span class="iconfont icon-fanhui"></span>
+    </div>
+    <div class="header-content">确认领奖</div>
+    <div class="header-right">
+    </div>
+</div>
+
+<!-- 内容 -->
+<div class="content">
+    <div class="goods-images">
+        {foreach $images as $v}
+        <img src="{$v['location']}" />
+        {/foreach}
+    </div>
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__hd">
+            <label class="weui-form-preview__label">消耗收入</label>
+            <em class="weui-form-preview__value">¥{$self['total']}</em>
+        </div>
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">奖名</label>
+                <span class="weui-form-preview__value">{$self['name']}</span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">奖品</label>
+                <span class="weui-form-preview__value">{$self['reward']}</span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">详情</label>
+                <span class="weui-form-preview__value">{php}echo $content;{/php}</span>
+            </div>
+        </div>
+    </div>
+    <form id="forms" action="/index/welfare" method="post">
+        <input type="hidden" name="id" value="{$self['id']}">
+        <input type="hidden" name="total" value="{$self['total']}">
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">支付密码</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="password" name="pay_pass" id='payPass' value="" placeholder="请输入支付密码">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-btn">
+        <button class="weui-btn weui-btn_primary" id="orderSubmit" type="submit">确认下单</button>
+    </div>
+    </form>
+</div>
+{include file="index@Index/floor"}
+<script src="{$src}js/ajax.js"></script>
+<script>
+    $('.icon-fanhui').on('click', function(){
+        location.href = '/';
+    });
+
+    $('#forms').off('submit').on('submit', function(){
+        var payPass = $("#payPass").val() ;
+
+        if( !payPass ){
+            $.alert('请输入支付密码');
+            return false ;
+        }
+        $.confirm("确定要执行此操作吗？", function() {
+            //点击确认后的回调函数
+            Ajax($('#forms'));
+        }, function() {
+            //点击取消后的回调函数
+        });
+        return false;
+    });
+</script>
+
+</html>

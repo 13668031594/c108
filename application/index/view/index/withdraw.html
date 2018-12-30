@@ -103,7 +103,7 @@
     $('#forms').off('submit').on('submit', function () {
 
         // 余额
-        var balance = $("#balance").val() ;
+        var balance = $("#balance").text() ;
         // 手续费
         var poundage = $("#div").val() ;
         // 最小提现
@@ -122,8 +122,8 @@
             return false ;
         }
 
-        if( balance < poundage ){
-            $.alert('余额小于提现金额') ;
+        if( balance < amount ){
+            $.alert('余额小于提现金额'+balance+'---'+amount) ;
             return false ;
         }
 

@@ -42,8 +42,17 @@ class AssetchangeController extends \app\http\controller\IndexController
         return parent::success('/');
     }
 
-    public function withdraw()
+    public function withdraw(Request $request)
     {
+        $this->class->validator_withdraw($request);
 
+        return parent::success('/');
+    }
+
+    public function welfare(Request $request)
+    {
+        $this->class->validator_welfare($request);
+
+        return parent::success('/');
     }
 }

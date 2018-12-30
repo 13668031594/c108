@@ -9,11 +9,13 @@
 namespace classes\index;
 
 
+use app\exchange\model\ExchangeModel;
 use app\goods\model\GoodsModel;
 use app\member\model\MemberModel;
 use app\member\model\MemberRecordModel;
 use app\order\model\OrderModel;
 use app\trade\model\TradeModel;
+use app\welfare\model\WelfareModel;
 use app\withdraw\model\WithdrawModel;
 use classes\system\SystemClass;
 use think\Db;
@@ -33,6 +35,8 @@ class AssetChangeClass extends \classes\IndexClass
         $this->member = parent::member();
 
         if ($this->member['status'] == '1') parent::ajax_exception(000, '您的账号被冻结了');
+
+        $this->date = date('Y-m-d H:i:s');
     }
 
     //转出3连
@@ -684,7 +688,6 @@ class AssetChangeClass extends \classes\IndexClass
         $model = new MemberModel();
         $model = $model->where('id','=',$member['id'])->find();
         $model->remind -= $number;
-        $model->integral += $div;
         $model->save();
 
         //建立订单
@@ -703,7 +706,26 @@ class AssetChangeClass extends \classes\IndexClass
         $order->bank_no = $member['bank_no'];
         $order->bank_name = $member['bank_name'];
         $order->bank_man = $member['bank_man'];
-        $order->created_at = $model->updated_at;
+        $order->created_at = date('Y-m-d H:i:s');
+        $order->save();
+
+        //初始化会员记录
+        $record = new MemberRecordModel();
+        $record->member_id = $model->id;
+        $record->account = $model->account;
+        $record->nickname = $model->nickname;
+        $record->remind = 0 - $number;
+        $record->content = '提现扣除余额『' . $number.'』';
+        $record->integral_now = $model->integral;
+        $record->integral_all = $model->integral_all;
+        $record->remind_now = $model->remind;
+        $record->remind_all = $model->remind_all;
+        $record->total_now = $model->total;
+        $record->total_all = $model->total_all;
+        $record->type = 60;
+        $record->created_at = $this->date;
+        $record->other = $order->order_number;
+        $record->save();
 
         Db::commit();
     }
@@ -720,4 +742,90 @@ class AssetChangeClass extends \classes\IndexClass
         return $order;
     }
 
+    public function validator_welfare(Request $request)
+    {
+        //验证条件
+        $rule = [
+            'id|奖品' => 'require|integer',
+            'total|消耗积分' => 'require|number|between:1,100000000',
+
+            'pay_pass|支付密码' => 'require',
+        ];
+
+        //验证
+        $result = parent::validator($request->post(), $rule);
+        //有错误报告则报错
+        if (!is_null($result)) parent::ajax_exception(000, $result);
+
+        //获取会员资料
+        $member = parent::member();
+
+        //所有参数
+        $data = $request->post();
+
+        //验证交易密码
+        if (md5($data['pay_pass']) != $member['pay_pass']) parent::ajax_exception(000, '支付密码输入错误');
+
+        $welfare = new WelfareModel();
+        $welfare = $welfare->where('id','=',$data['id'])->find();
+        if (is_null($welfare))parent::ajax_exception(000, '请刷新重试(we)');
+        if ($welfare->total != $data['total'])parent::ajax_exception(000, '请刷新重试(we)');
+
+        Db::startTrans();
+
+        //修改会员信息
+        $model = new MemberModel();
+        $model = $model->where('id','=',$member['id'])->find();
+        $model->total -= $data['total'];
+
+        if ($model->total < 0)parent::ajax_exception(000, '累计收入不足');
+        $model->save();
+
+        //建立订单
+        $order = new ExchangeModel();
+        $order->order_number = self::new_exchange();
+        $order->welfare_id = $welfare->id;
+        $order->welfare_name = $welfare->name;
+        $order->welfare_total = $welfare->total;
+        $order->welfare_reward = $welfare->reward;
+        $order->member_id = $member['id'];
+        $order->member_account = $member['account'];
+        $order->member_phone = $member['phone'];
+        $order->member_nickname = $member['nickname'];
+        $order->member_create = $member['created_at'];
+        $order->created_at = date('Y-m-d H:i:s');
+        $order->save();
+
+        //初始化会员记录
+        $record = new MemberRecordModel();
+        $record->member_id = $model->id;
+        $record->account = $model->account;
+        $record->nickname = $model->nickname;
+        $record->total = 0 - $welfare->total;
+        $record->content = '兑换福利奖『'.$welfare->name.'』扣除累计收入『' . $welfare->total.'』';
+        $record->integral_now = $model->integral;
+        $record->integral_all = $model->integral_all;
+        $record->remind_now = $model->remind;
+        $record->remind_all = $model->remind_all;
+        $record->total_now = $model->total;
+        $record->total_all = $model->total_all;
+        $record->type = 70;
+        $record->created_at = $this->date;
+        $record->other = $order->order_number;
+        $record->save();
+
+        Db::commit();
+    }
+
+    private function new_exchange()
+    {
+        $order = 'e' . time() . rand(100, 999);
+
+        $model = new ExchangeModel();
+        $test = $model->where('order_number', '=', $order)->find();
+
+        if ($test) return self::new_order();
+
+        return $order;
+    }
 }

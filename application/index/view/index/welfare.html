@@ -1,0 +1,55 @@
+{include file="index@Index/header"}
+
+<body style="background: #f4f4f4;">
+<!-- 顶部 -->
+<div id="header">
+    <div class="header-left">
+        <span class="iconfont icon-fanhui"></span>
+    </div>
+    <div class="header-content">福利奖</div>
+    <div class="header-right">
+    </div>
+</div>
+
+<!-- 内容 -->
+<div class="content">
+    <div class="weui-panel weui-panel_access">
+        {if count($message) > 0}
+        <div class="weui-panel__bd">
+            {foreach $message as $k => $v}
+            <a href="/index/welfare?id={$v['id']}" class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" src="{$v['location']}">
+                </div>
+                <div class="weui-media-box__bd">
+                    <h4 class="weui-media-box__title">{$v['name']}</h4>
+                    <h4 class="weui-media-box__title">{$v['reward']}</h4>
+                    <p class="weui-media-box__desc">&yen;{$v['total']}</p>
+                </div>
+            </a>
+            {/foreach}
+        </div>
+        {/if}
+    </div>
+
+</div>
+</body>
+{include file="index@Index/floor"}
+<script src="{$src}js/ajax.js"></script>
+<script>
+    $('.icon-fanhui').on('click', function () {
+        location.href = '/';
+    });
+
+    $('#forms').off('submit').on('submit', function () {
+        $.confirm("确定要执行此操作吗？", function () {
+            //点击确认后的回调函数
+            Ajax($('#forms'));
+        }, function () {
+            //点击取消后的回调函数
+        });
+        return false;
+    });
+</script>
+
+</html>

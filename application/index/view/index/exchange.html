@@ -6,7 +6,7 @@
     <div class="header-left">
         <span class="iconfont icon-fanhui"></span>
     </div>
-    <div class="header-content">转换</div>
+    <div class="header-content">报单</div>
     <div class="header-right">
     </div>
 </div>
@@ -64,135 +64,6 @@
         {/if}
         {/if}
     </div>
-    <!--  小图 -->
-    <!--
-    <div class="weui-cells">
-        {if count($gradess) > 0}
-        {foreach $gradess as $k => $v}
-        <a class="weui-cell weui-cell_access" href="javascript:;">
-            <div class="weui-cell__hd"><img src={$v['location']}></div>
-            <div class="weui-cell__bd">
-                <p>{$v['describe']}</p>
-            </div>
-            <div class="weui-cell__ft">&yen;{$v['amount']}</div>
-
-        </a>
-        {/foreach}
-        {/if}
-    </div>
-    -->
-    <!-- 大图 -->
-    <!--
-    <div class="weui-panel weui-panel_access">
-        <div class="weui-panel__bd">
-            {if count($gradess) > 0}
-            {foreach $gradess as $k => $v}
-            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-                <div class="weui-media-box__hd">
-                    <img class="weui-media-box__thumb" src="{$v['location']}">
-                </div>
-                <div class="weui-media-box__bd">
-                    <h4 class="weui-media-box__title">{$v['describe']}</h4>
-                    <p class="weui-media-box__desc">&yen;{$v['amount']}</p>
-                </div>
-            </a>
-            {/foreach}
-            {/if}
-        </div>
-    </div>
-    -->
-    <!-- 老版
-    <form id="forms" action="/index/exchange" method="post">
-        {if count($grades) > 0}
-        <div class="weui-cells weui-cells_radio">
-
-            {foreach $grades as $k => $v}
-            <label class="weui-cell weui-check__label" for="{$k}">
-                <div class="weui-cell__bd">
-                    <p>{$v}：{$set[$k]}</p>
-                </div>
-                <div class="weui-cell__ft">
-                    <input type="radio" class="weui-check" id="{$k}" name="radio" value="{$k}|{$set[$k]}">
-                    <span class="weui-icon-checked"></span>
-                </div>
-            </label>
-            {/foreach}
-        </div>
-
-        <div class="weui-cells weui-cells_form">
-
-
-
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">支付密码</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="password" name="pay_pass" value="" placeholder="请输入支付密码">
-                </div>
-            </div>
-        </div>
-
-        <div class="form-btn">
-            <button class="weui-btn weui-btn_primary" type="submit">确认</button>
-        </div>
-        {else/}
-        <div class="weui-cells weui-cells_form">
-
-
-            {if $members['grade'] == '3'}
-            <div class="weui-cells weui-cells_radio">
-
-                <label class="weui-cell weui-check__label">
-                    <div class="weui-cell__bd">
-                        <p>直推{$set['levelDirectorAgent']}个{$member_grades['3']}，当前{$members['child']}</p>
-                    </div>
-                </label>
-                <label class="weui-cell weui-check__label">
-                    <div class="weui-cell__bd">
-                        <p>团队业绩达到{$set['levelDirectorTotal']}</p>
-                    </div>
-                </label>
-                <label class="weui-cell weui-check__label">
-                    <div class="weui-cell__bd">
-                        <p>即可晋升为{$member_grades['4']}</p>
-                    </div>
-                </label>
-            </div>
-            {/if}
-            {if $members['grade'] == '4'}
-            <div class="weui-cells weui-cells_radio">
-
-                <label class="weui-cell weui-check__label">
-                    <div class="weui-cell__bd">
-                        <p>直推{$set['levelChairmanDirector']}个{$member_grades['4']}，当前{$members['child']}</p>
-                    </div>
-                </label>
-                <label class="weui-cell weui-check__label">
-                    <div class="weui-cell__bd">
-                        <p>团队业绩达到{$set['levelChairmanTotal']}</p>
-                    </div>
-                </label>
-                <label class="weui-cell weui-check__label">
-                    <div class="weui-cell__bd">
-                        <p>即可晋升为{$member_grades['5']}</p>
-                    </div>
-                </label>
-            </div>
-            {/if}
-            {if $members['grade'] == '5'}
-            <div class="weui-cells weui-cells_radio">
-
-                <label class="weui-cell weui-check__label">
-                    <div class="weui-cell__bd">
-                        <p>您已经是最高等级的会员了！</p>
-                    </div>
-                </label>
-            </div>
-            {/if}
-        </div>
-        {/if}
-
-    </form>
-    -->
 </div>
 </body>
 {include file="index@Index/floor"}

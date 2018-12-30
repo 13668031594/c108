@@ -186,7 +186,7 @@ class MemberClass extends AdminClass implements ListInterface
     {
         $rule = [
             'type' => 'require',
-            'number' => 'require|integer|between:-1000000,1000000',
+            'number' => 'require|integer|between:-1000000000,1000000000',
         ];
 
         $file = [

@@ -44,14 +44,20 @@
                         </div>
                         <div class="list-author-time">
                             <div class="list-time">
-                                <span>金额：</span>
-                                <span>{$v['total']}</span>
+                                <span>消耗收入：</span>
+                                <span>{$v['welfare_total']}</span>
                             </div>
                         </div>
                         <div class="list-author-time">
                             <div class="list-time">
-                                <span>积分：</span>
-                                <span>{$v['integral']}</span>
+                                <span>奖名：</span>
+                                <span>{$v['welfare_name']}</span>
+                            </div>
+                        </div>
+                        <div class="list-author-time">
+                            <div class="list-time">
+                                <span>奖品：</span>
+                                <span>{$v['welfare_reward']}</span>
                             </div>
                         </div>
                         <div class="list-author-time">
@@ -96,7 +102,7 @@
             loading = false;
             $.ajax({
                 type: 'get',
-                url: '/index/withdraw-list?page='+page,
+                url: '/index/welfare-list?page='+page,
                 dataType: 'json',
                 beforeSend: function(){
                     $('.weui-loadmore').show();
@@ -114,12 +120,14 @@
                                     '<div class="list-author-time">' +
                                     '<div class="list-time"><span>时间：</span><span>'+ i.created_at +'</span></div></div>' +
                                     '<div class="list-author-time">' +
-                                    '<div class="list-time"><span>金额：</span><span>'+ i.total +'</span></div></div></div>'+
+                                    '<div class="list-time"><span>消耗收入：</span><span>'+ i.welfare_total +'</span></div></div>'+
                                     '<div class="list-author-time">' +
-                                    '<div class="list-time"><span>积分：</span><span>'+ i.integral +'</span></div></div></div>'+
+                                    '<div class="list-time"><span>奖名：</span><span>'+ i.welfare_name +'</span></div></div>'+
                                     '<div class="list-author-time">' +
-                                    '<div class="list-time"><span>状态：</span><span>'+ i.status +'</span></div></div></div>'+
-                                    '</div></div></div>';
+                                    '<div class="list-time"><span>奖品：</span><span>'+ i.welfare_reward +'</span></div></div>'+
+                                    '<div class="list-author-time">' +
+                                    '<div class="list-time"><span>状态：</span><span>'+ i.status +'</span></div></div>'+
+                                    '</div></div></div></div>';
                             });
                             $("#panel-content").append(str);
                         }

@@ -10,15 +10,20 @@ namespace classes\index;
 
 use app\adv\model\AdvModel;
 use app\bank\model\BankModel;
+use app\exchange\model\ExchangeModel;
 use app\goods\model\GoodsContentModel;
 use app\goods\model\GoodsImagesModel;
 use app\goods\model\GoodsModel;
 use app\member\model\MemberModel;
 use app\notice\model\NoticeModel;
+use app\welfare\model\WelfareContentModel;
+use app\welfare\model\WelfareImagesModel;
+use app\welfare\model\WelfareModel;
 use app\withdraw\model\WithdrawModel;
 use classes\goods\GoodsClass;
 use classes\member\MemberClass;
 use classes\system\SystemClass;
+use classes\welfare\WelfareClass;
 
 class IndexClass extends \classes\IndexClass
 {
@@ -398,13 +403,80 @@ class IndexClass extends \classes\IndexClass
 
         $other = [
             'where' => [
-                'id' => ['=',$member['id']]
+                'member_id' => ['=', $member['id']]
             ]
         ];
 
-        $list = parent::page($model,$other);
+        $list = parent::page($model, $other);
 
-        $list['status'] = $status;
+        foreach ($list['message'] as &$v)$v['status'] = $status[$v['status']];
+
+        return $list;
+    }
+
+    public function welfare()
+    {
+        $model = new WelfareClass();
+
+        return $model->index();
+    }
+
+    public function welfare_info()
+    {
+        $id = input('id');
+        if (is_null($id)) exit('参数错误');
+
+        //产品
+        $model = new WelfareModel();
+        $model = $model->where('id', '=', $id)->find();
+        if (is_null($model)) exit('奖品不存在');
+
+        $model->location = is_null($model->location) ? config('young.image_not_found') : $model->location;
+
+        $model = $model->getData();
+
+        //图片
+        $images = new WelfareImagesModel();
+        $images = $images->where('pid', '=', $id)->where('id', '<>', $model['cover'])->column('*');
+        $image = [];
+        $i = 1;
+        foreach ($images as $k => $v) {
+
+            $image[$i]['id'] = $v['id'];
+            $image[$i]['location'] = is_null($v['location']) ? config('young.image_not_found') : $v['location'];
+
+            $i++;
+        }
+        ksort($image);
+
+        //正文
+        $content = new WelfareContentModel();
+        $content = $content->where('pid', '=', $id)->find();
+
+        //集合
+        return [
+            'self' => $model,
+            'images' => $image,
+            'content' => $content ? $content->content : ''
+        ];
+    }
+
+    public function welfare_list()
+    {
+        $model = new ExchangeModel();
+
+        $status = $model->statues;
+
+        $member = parent::member();
+
+        $other = [
+            'where' => [
+                'member_id' => ['=', $member['id']]
+            ]
+        ];
+
+        $list = parent::page($model, $other);
+        foreach ($list['message'] as &$v)$v['status'] = $status[$v['status']];
 
         return $list;
     }
