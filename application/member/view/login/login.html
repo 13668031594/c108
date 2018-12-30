@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <!-- 移动端声明，按1比例缩放，禁止用户缩放 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="format-detection" content="telephone=yes"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="format-detection" content="telephone=no"/> <!-- 禁止自动识别为电话号码 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.3/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.1/css/jquery-weui.min.css">
+    <link rel="stylesheet" type="text/css" href="{$src}css/login.css"/>
+</head>
+
+<body>
+<div class="login">
+    <div class="login-title">登录</div>
+    <form class="forms" action="/index/login" method="post">
+        <input type="text" class="form-input username" name="account" placeholder="请输入账号" maxlength="11" value="{if isset($account)}{$account}{/if}"/>
+        <input type="password" class="form-input password" name="password" placeholder="请输入密码" value="{if isset($password)}{$password}{/if}"/>
+        <button class="form-btn" type="submit">登录</button>
+    </form>
+
+    <div class="login-bottom">
+        <a href="/index/reset">忘记密码</a>
+        <a href="/index/reg">注册</a>
+    </div>
+
+    <!-- 背景 -->
+    <div class="login-out"></div>
+</div>
+
+<input type="hidden" id="hint" value="{if !empty($errors)}{$errors}{/if}"/>
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/jquery-weui.min.js"></script>
+<script>
+    //提示
+    if ($('#hint') && $('#hint').val() != '') {
+        $.alert($('#hint').val(), "提示");
+    }
+
+    $('.forms').submit(function () {
+        console.log('123');
+        var str = '';
+        if ($('.username').val() == '') str += '请输入账号 ';
+        if ($('.password').val() == '') str += '请输入密码';
+        if (str != '') {
+            $.alert(str, '提示');
+            return false;
+        } else {
+            return true;
+        }
+    });
+</script>
+
+</html>

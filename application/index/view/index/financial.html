@@ -1,0 +1,115 @@
+{include file="index@Index/header"}
+
+<body>
+{include file="index@Index/header2"}
+
+<!-- 导航栏 -->
+<div class="navigation">
+    <!-- 选中class：nav-item-choice -->
+    <a href="/index/financial?type=1" class="nav-item {if $type == '1'}nav-item-choice{/if}">积分</a>
+    <a href="/index/financial?type=2" class="nav-item {if $type == '2'}nav-item-choice{/if}">余额</a>
+    <a href="/index/financial?type=3" class="nav-item {if $type == '3'}nav-item-choice{/if}">收入</a>
+</div>
+
+<div class="weui-panel weui-panel_access">
+    {if $type == '1'}
+    <div class="weui-panel__hd">积分记录</div>
+    {elseif $type == '2'}
+    <div class="weui-panel__hd">余额记录</div>
+    {else/}
+    <div class="weui-panel__hd">收入记录</div>
+    {/if}
+    <div class="weui-panel__bd">
+        {foreach $record['message'] as $v}
+        <!-- 一项开始 -->
+        <div class="weui-media-box weui-media-box_appmsg">
+            <div class="weui-media-box__bd">
+                <div class="list-author-time">
+                    <div class="list-author">
+                        <span>操作类型：</span>
+                        <span>{$v['type']}</span>
+                    </div>
+
+                    <div class="list-time">
+                        <span>时间：</span>
+                        <span>{$v['created_at']}</span>
+                    </div>
+                </div>
+                <p class="weui-media-box__desc">{$v['content']}</p>
+            </div>
+        </div>
+        <!-- 一项结束 -->
+        {/foreach}
+    </div>
+    <input type="hidden" id="type" value="{$type}"/>
+</div>
+
+<!-- 加载 -->
+<div class="weui-loadmore">
+    <i class="weui-loading"></i>
+    <span class="weui-loadmore__tips">正在加载</span>
+</div>
+
+<div class="not-more"><i></i><span>暂无数据</span><i></i></div>
+
+{include file="index@Index/floor"}
+
+<script>
+    //滚动加载
+    var loading = true;  //状态标记
+    var stop = false;
+    var page = 2;
+    var all = 2;
+    $('.weui-loadmore').hide();
+    $(document.body).infinite().on("infinite", function () {
+        if (loading && !stop) {
+            loading = false;
+            console.log('type', $('#type').val());
+            $.ajax({
+                type: 'get',
+                url: '/index/financial-table?type=' + $('#type').val() + '&page=' + page,
+                dataType: 'json',
+                beforeSend: function () {
+                    $('.weui-loadmore').show();
+                },
+                success: function (resp) {
+                    //console.log('data', resp);
+                    if (resp && resp.status == 'success') {
+                        var list = resp.message;
+                        all = Math.ceil(Number(resp.total)/20);
+                        if( list.length > 0 ){
+                            var str = '';
+                            list.forEach(function (i) {
+                                str += '<div class="weui-media-box weui-media-box_appmsg"><div class="weui-media-box__bd">' +
+                                    '<div class="list-author-time"><div class="list-author"><span>操作类型：</span><span>' + i.type + '</span></div>' +
+                                    '<div class="list-time"><span>时间：</span><span>' + i.created_at + '</span></div></div>' +
+                                    '<p class="weui-media-box__desc">' + i.content + '</p></div></div>';
+                            });
+                            $(".weui-panel__bd").append(str);
+                        }
+                        page++;
+                        if (page > all) {
+                            stop = true;
+                            $('.weui-loadmore').hide();
+                            $('.not-more').show();
+                        }
+                    } else {
+                        if( resp.code == '999' ){
+                            $.alert('登录失效');
+                            window.location.href = '/index/login';
+                        }else{
+                            $.alert(resp.message);
+                        }
+                    }
+                },
+                error: function (data) {
+                    $('.weui-loadmore').hide();
+                    $.toast(data.status, "text");
+                }
+            });
+        }
+    });
+
+</script>
+
+</html>

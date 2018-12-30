@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>系统设置</title>
+    <link rel="stylesheet" href="{$src}layui/css/layui.css">
+    <link rel="stylesheet" href="{$src}res/css/common.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="http://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+            crossorigin="anonymous"></script>
+
+</head>
+
+<div class="layui-fluid">
+
+    <div class="layui-row m-breadcrumb">
+        <span class="layui-breadcrumb" lay-separator="/">
+          <a href="javascript:;">首页</a>
+          <a><cite>系统设置</cite></a>
+        </span>
+    </div>
+    <form class="layui-form" lay-filter="form" action="/admin/system/index">
+
+        <div class="layui-tab layui-tab-card" lay-filter="tab">
+            <ul class="layui-tab-title">
+                <li class="layui-this">系统设置</li>
+                <li>报单产品</li>
+                <li>晋升设置</li>
+                <li>奖励设置</li>
+                <li>提现转账</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-form-min">
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">网站名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="webName" lay-verify="required" title="网站名称"
+                                       placeholder="网站名称" autocomplete="off" value="{$self['webName']}"
+                                       class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">前台显示的网站名字</div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">title</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="webTitle" lay-verify="required" title="网站title"
+                                       placeholder="网站title" autocomplete="off" value="{$self['webTitle']}"
+                                       class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">网站顶部title显示到关键词</div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">keyword</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="webKeyword" title="关键字"
+                                       placeholder="网站名称" autocomplete="off" value="{$self['webKeyword']}"
+                                       class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">网站关键字</div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">网站描述</label>
+                            <div class="layui-input-block">
+                        <textarea type="text" name="webDesc" title="网站描述"
+                                  placeholder="网站描述" autocomplete="off"
+                                  class="layui-textarea">{$self['webDesc']}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">底部版权</label>
+                            <div class="layui-input-block">
+                        <textarea type="text" name="webCopyright" title="底部版权"
+                                  placeholder="底部版权" autocomplete="off"
+                                  class="layui-textarea">{$self['webCopyright']}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">开关网站</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" id='webSwitch' lay-filter="webSwitch"
+                                       lay-skin="switch"
+                                       lay-text="开启|关闭" {if $self["webSwitch"] == 'on'}checked{/if}/>
+                                <input type="hidden" id='webSwitchValue' name="webSwitch" value="{$self['webSwitch']}"/>
+                            </div>
+                        </div>
+
+                        <!-- style="display:none" -->
+                        <div id="webClose" class="layui-form-item" {if $self[
+                        "webSwitch"] == 'on'}style="display:none"{/if}>
+                        <label class="layui-form-label">关闭原因</label>
+                        <div class="layui-input-block">
+                            <textarea id="webCloseReason" title="关闭原因" name="webCloseReason" lay-verify="reason"
+                                      placeholder="请输入关闭原因"
+                                      class="layui-textarea">{$self['webCloseReason']}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">会员激活</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="levelMember" lay-verify="numberZ" title="会员激活"
+                                   placeholder="会员激活" autocomplete="off" value="{$self['levelMember']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">最高1亿</div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">经销商激活</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="levelBusiness" lay-verify="numberZ" title="经销商激活"
+                                   placeholder="经销商激活" autocomplete="off" value="{$self['levelBusiness']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">最高1亿</div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">代理激活</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="levelAgent" lay-verify="numberZ" title="代理激活"
+                                   placeholder="代理激活" autocomplete="off" value="{$self['levelAgent']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">最高1亿</div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">会员升经销</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="levelMemberBusiness" lay-verify="numberZ" title="会员升经销商"
+                                   placeholder="会员升经销商" autocomplete="off" value="{$self['levelMemberBusiness']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">最高1亿</div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">会员升代理</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="levelMemberAgent" lay-verify="numberZ" title="会员升代理"
+                                   placeholder="会员升代理" autocomplete="off" value="{$self['levelMemberAgent']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">最高1亿</div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">经销升代理</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="levelBusinessAgent" lay-verify="numberZ" title="经销商升代理"
+                                   placeholder="经销商升代理" autocomplete="off" value="{$self['levelBusinessAgent']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">最高1亿</div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">总监直推</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="levelDirectorAgent" lay-verify="numberZ" title="总监直推"
+                                   placeholder="总监直推" autocomplete="off" value="{$self['levelDirectorAgent']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">最高1亿</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">总监业绩</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="levelDirectorTotal" lay-verify="numberZ" title="总监业绩"
+                                   placeholder="总监业绩" autocomplete="off" value="{$self['levelDirectorTotal']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">最高1亿</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">董事直推</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="levelChairmanDirector" lay-verify="numberZ" title="董事直推"
+                                   placeholder="董事直推" autocomplete="off" value="{$self['levelChairmanDirector']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">最高1亿</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">董事业绩</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="levelChairmanTotal" lay-verify="numberZ" title="董事业绩"
+                                   placeholder="董事业绩" autocomplete="off" value="{$self['levelChairmanTotal']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">最高1亿</div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">会员直推</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rewardMemberFirst" lay-verify="numberZ" title="会员直推"
+                                   placeholder="会员直推" autocomplete="off" value="{$self['rewardMemberFirst']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">销售奖</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">会员间推</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rewardMemberSecond" lay-verify="numberZ" title="会员间推"
+                                   placeholder="会员间推" autocomplete="off" value="{$self['rewardMemberSecond']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">销售奖</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">经销商直推</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rewardBusinessFirst" lay-verify="numberZ" title="经销商直推"
+                                   placeholder="经销商直推" autocomplete="off" value="{$self['rewardBusinessFirst']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">销售奖</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">经销商间推</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rewardBusinessSecond" lay-verify="numberZ" title="经销商间推"
+                                   placeholder="经销商间推" autocomplete="off" value="{$self['rewardBusinessSecond']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">销售奖</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">代理直推</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rewardAgentFirst" lay-verify="numberZ" title="代理直推"
+                                   placeholder="代理直推" autocomplete="off" value="{$self['rewardAgentFirst']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">销售奖</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">代理间推</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rewardAgentSecond" lay-verify="numberZ" title="代理间推"
+                                   placeholder="代理间推" autocomplete="off" value="{$self['rewardAgentSecond']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">销售奖</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">总监直推</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rewardDirectorFirst" lay-verify="numberZ" title="总监直推"
+                                   placeholder="总监直推" autocomplete="off" value="{$self['rewardDirectorFirst']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">销售奖</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">总监间推</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rewardDirectorSecond" lay-verify="numberZ" title="总监间推"
+                                   placeholder="总监间推" autocomplete="off" value="{$self['rewardDirectorSecond']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">销售奖</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">董事直推</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rewardChairmanFirst" lay-verify="numberZ" title="董事直推"
+                                   placeholder="董事直推" autocomplete="off" value="{$self['rewardChairmanFirst']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">销售奖</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">董事间推</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rewardChairmanSecond" lay-verify="numberZ" title="董事间推"
+                                   placeholder="董事间推" autocomplete="off" value="{$self['rewardChairmanSecond']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">销售奖</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">津贴奖</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rewardTotal" lay-verify="numberZ" title="津贴奖"
+                                   placeholder="津贴奖" autocomplete="off" value="{$self['rewardTotal']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">总监以上享有</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">育成奖</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rewardDirector" lay-verify="numberZ" title="育成奖"
+                                   placeholder="育成奖" autocomplete="off" value="{$self['rewardDirector']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">培育出下级总监后享有</div>
+                    </div>
+                </div>
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">董事分红</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rewardChairman" lay-verify="numberZ" title="董事分红"
+                                   placeholder="董事分红" autocomplete="off" value="{$self['rewardChairman']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">利润分红</div>
+                    </div>
+                </div>
+
+                <blockquote class="layui-elem-quote">所有奖励都为百分比，精确到2位小数，例如：填写25.33即为25.33%
+                </blockquote>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-form-min">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">提现基数</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="withdrawBase" lay-verify="numberZ" title="提现基数"
+                                   placeholder="提现基数" autocomplete="off" value="{$self['withdrawBase']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">提现最低数</div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">提现倍数</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="withdrawTimes" lay-verify="numberZ" title="提现倍数"
+                                   placeholder="提现倍数" autocomplete="off" value="{$self['withdrawTimes']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">提现数必须是这个数的正整数倍</div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">手续费比例</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="withdrawPoundage" lay-verify="numberZ" title="手续费比例"
+                                   placeholder="手续费比例" autocomplete="off" value="{$self['withdrawPoundage']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">收取的手续费进入积分</div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">转账基数</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="payActBase" lay-verify="numberZ" title="转账基数"
+                                   placeholder="转账基数" autocomplete="off" value="{$self['payActBase']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">提现最低数</div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">转账倍数</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="payActTimes" lay-verify="numberZ" title="转账倍数"
+                                   placeholder="转账倍数" autocomplete="off" value="{$self['payActTimes']}"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">提现数必须是这个数的正整数倍</div>
+                    </div>
+                </div>
+                <blockquote class="layui-elem-quote">手续费为百分比，精确到2位小数，填写10即为10%
+                </blockquote>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button id='submit' class="layui-btn" lay-filter="*" lay-submit>保存</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script src="{$src}layui/layui.js"></script>
+<script>
+
+    var urls = {
+        upload: '/admin/system/image', // logo上传地址
+    };
+
+    layui.config({
+        base: '{$src}res/js/common/'
+    }).use(['mForm', 'layer', 'jquery', 'element', 'upload'], function () {
+
+        var element = layui.element;
+        var form = layui.form;
+        var layer = layui.layer;
+
+        var upload = layui.upload;
+        upload.render({
+            elem: '#upload'
+            , url: urls.upload
+            , field: 'images'
+            , exts: 'jpg|png|gif|bmp|jpeg'
+            , size: 500//kb
+            , number: 1
+            , done: function (res, index, upload) {
+                console.log(res);
+                /**
+                 * 返回格式
+                 * {
+                 *      status : ,
+                 *      message : ,
+                 *      image : , 成功以后图片预览地址
+                 *      imageId : 成功以后图片id
+                 * }
+                 */
+
+                // image
+                // imageId  图片id
+
+                if (res.status == 'success') {
+                    layer.msg('上传成功');
+                    $("#logoUrl").prop('src', res.image);
+                    $("#logo").prop('value', res.image);
+                } else {
+                    layer.msg('上传失败');
+                }
+            }
+        });
+
+        form.verify({
+
+            reason: function (value, item) {
+                if (!$("#webSwitch").prop('checked') && !value) {
+                    return '请填写关闭网站理由';
+                }
+            }
+        });
+
+        // 监听开关
+        form.on('switch(webSwitch)', function (data) {
+            if (data.elem.checked) {
+                $('#webClose').hide();
+                $('#webSwitchValue').prop('value', 'on');
+            } else {
+                $('#webClose').show();
+                $('#webSwitchValue').prop('value', 'off');
+            }
+        });
+
+        form.on('switch(userRegisterSwitch)', function (data) {
+            if (data.elem.checked) {
+                $('#userRegisterSwitch').prop('value', 'on');
+            } else {
+                $('#userRegisterSwitch').prop('value', 'off');
+            }
+        });
+
+    });
+</script>
+</body>
+</html>

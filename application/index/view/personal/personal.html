@@ -1,0 +1,110 @@
+{include file="index@Index/header"}
+<body style="background: #f4f4f4;">
+<!-- 顶部 -->
+<div id="header">
+    <div class="header-left">
+        <span class="iconfont icon-552dc065f0478"></span>
+    </div>
+    <div class="header-content">我的</div>
+    <div class="header-right">
+        <a class="iconfont icon-shezhix" style="color: white" href="/index/personal"></a>
+
+    </div>
+</div>
+
+<!-- 内容 -->
+<div class="content">
+    <div class="personal">
+        <!--<h3 class="personal-title">众筹</h3>-->
+        <div class="personal-info">
+            <p class="personal-nickname">昵称：{$member['nickname']}</p>
+            <p class="personal-level">{$grades[$member['grade']]}</p>
+        </div>
+        <ul class="personal-integral">
+            <li>
+                <p>余额</p>
+                <p>{$member['remind']}</p>
+            </li>
+            <li>
+                <p>积分</p>
+                <p>{$member['integral']}</p>
+            </li>
+            <li>
+                <p>收入</p>
+                <p>{$member['total']}</p>
+            </li>
+
+        </ul>
+    </div>
+
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="/index/self">
+            <div class="weui-cell__hd"><span class="iconfont icon-touxiang"></span></div>
+            <div class="weui-cell__bd">
+                <p>个人资料</p>
+            </div>
+            <div class="weui-cell__ft"></div>
+        </a>
+
+        <a class="weui-cell weui-cell_access" href="/index/share">
+            <div class="weui-cell__hd"><span class="iconfont icon-erweima"></span></div>
+            <div class="weui-cell__bd">
+                <p>分享</p>
+            </div>
+            <div class="weui-cell__ft"></div>
+        </a>
+
+        <!--<a class="weui-cell weui-cell_access" href="/index/crowd">
+            <div class="weui-cell__hd"><span class="iconfont icon-zhongchou" style="font-size: 2.1rem;"></span></div>
+            <div class="weui-cell__bd">
+                <p>众筹</p>
+            </div>
+            <div class="weui-cell__ft"></div>
+        </a>-->
+
+        <a class="weui-cell weui-cell_access" href="/index/team">
+            <div class="weui-cell__hd"><span class="iconfont icon-shequn1" style="font-size: 2.1rem;"></span></div>
+            <div class="weui-cell__bd">
+                <p>团队</p>
+            </div>
+            <div class="weui-cell__ft"></div>
+        </a>
+
+        <a class="weui-cell weui-cell_access" href="/index/password">
+            <div class="weui-cell__hd"><span class="iconfont icon-mima" style="font-size: 2.2rem;"></span></div>
+            <div class="weui-cell__bd">
+                <p>修改登录密码</p>
+            </div>
+            <div class="weui-cell__ft"></div>
+        </a>
+
+        <a class="weui-cell weui-cell_access" href="/index/pay-pass">
+            <div class="weui-cell__hd"><span class="iconfont icon-zhifumima" style="font-size: 2.1rem;"></span></div>
+            <div class="weui-cell__bd">
+                <p>修改支付密码</p>
+            </div>
+            <div class="weui-cell__ft"></div>
+        </a>
+    </div>
+
+    <div class="logout">退出登录</div>
+</div>
+
+{include file="index@Index/floor"}
+
+<script>
+    $('.logout').on('click', function () {
+        $.confirm({
+            title: '提示',
+            text: '确定要注销并退出吗？',
+            onOK: function () {
+                //点击确认
+                window.location.href = '/index/logout';
+            },
+            onCancel: function () {
+            }
+        });
+    });
+</script>
+
+</html>

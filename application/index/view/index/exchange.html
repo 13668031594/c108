@@ -1,0 +1,142 @@
+activate.html{include file="index@Index/header"}
+
+<body style="background: #f4f4f4;">
+<!-- 顶部 -->
+<div id="header">
+    <div class="header-left">
+        <span class="iconfont icon-fanhui"></span>
+    </div>
+    <div class="header-content">转换</div>
+    <div class="header-right">
+    </div>
+</div>
+
+<!-- 内容 -->
+<div class="content">
+    <ul class="integral-info">
+        <li>
+            <p>余额</p>
+            <p>{$members['remind']}</p>
+        </li>
+
+        <li>
+            <p>当前等级</p>
+            <p>{$members['grade_name']}</p>
+        </li>
+
+        <li>
+            <p>业绩</p>
+            <p>{$members['total_all']}</p>
+        </li>
+    </ul>
+
+    <form id="forms" action="/index/exchange" method="post">
+        {if count($grades) > 0}
+        <div class="weui-cells weui-cells_radio">
+
+            {foreach $grades as $k => $v}
+            <label class="weui-cell weui-check__label" for="{$k}">
+                <div class="weui-cell__bd">
+                    <p>{$v}：{$set[$k]}</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" id="{$k}" name="radio" value="{$k}|{$set[$k]}">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+            {/foreach}
+        </div>
+
+        <div class="weui-cells weui-cells_form">
+
+            <!--<div class="weui-cells__tips">至少转换数量为100且为100的倍数</div>-->
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">支付密码</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="password" name="pay_pass" value="" placeholder="请输入支付密码">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-btn">
+            <button class="weui-btn weui-btn_primary" type="submit">确认</button>
+        </div>
+        {else/}
+        <div class="weui-cells weui-cells_form">
+
+
+            {if $members['grade'] == '3'}
+            <div class="weui-cells weui-cells_radio">
+
+                <label class="weui-cell weui-check__label">
+                    <div class="weui-cell__bd">
+                        <p>直推{$set['levelDirectorAgent']}个{$member_grades['3']}，当前{$members['child']}</p>
+                    </div>
+                </label>
+                <label class="weui-cell weui-check__label">
+                    <div class="weui-cell__bd">
+                        <p>团队业绩达到{$set['levelDirectorTotal']}</p>
+                    </div>
+                </label>
+                <label class="weui-cell weui-check__label">
+                    <div class="weui-cell__bd">
+                        <p>即可晋升为{$member_grades['4']}</p>
+                    </div>
+                </label>
+            </div>
+            {/if}
+            {if $members['grade'] == '4'}
+            <div class="weui-cells weui-cells_radio">
+
+                <label class="weui-cell weui-check__label">
+                    <div class="weui-cell__bd">
+                        <p>直推{$set['levelChairmanDirector']}个{$member_grades['4']}，当前{$members['child']}</p>
+                    </div>
+                </label>
+                <label class="weui-cell weui-check__label">
+                    <div class="weui-cell__bd">
+                        <p>团队业绩达到{$set['levelChairmanTotal']}</p>
+                    </div>
+                </label>
+                <label class="weui-cell weui-check__label">
+                    <div class="weui-cell__bd">
+                        <p>即可晋升为{$member_grades['5']}</p>
+                    </div>
+                </label>
+            </div>
+            {/if}
+            {if $members['grade'] == '5'}
+            <div class="weui-cells weui-cells_radio">
+
+                <label class="weui-cell weui-check__label">
+                    <div class="weui-cell__bd">
+                        <p>您已经是最高等级的会员了！</p>
+                    </div>
+                </label>
+            </div>
+            {/if}
+        </div>
+        {/if}
+
+    </form>
+</div>
+{include file="index@Index/floor"}
+<script src="{$src}js/ajax.js"></script>
+<script>
+    $('.icon-fanhui').on('click', function(){
+        location.href = '/';
+    });
+
+    $('#forms').off('submit').on('submit', function(){
+        $.confirm("确定要执行此操作吗？", function() {
+            //点击确认后的回调函数
+            Ajax($('#forms'));
+        }, function() {
+            //点击取消后的回调函数
+        });
+        return false;
+    });
+</script>
+
+</html>

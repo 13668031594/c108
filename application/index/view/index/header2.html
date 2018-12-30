@@ -1,0 +1,82 @@
+<!-- 顶部 -->
+<div id="header">
+    <div class="header-left">
+        <!--<span class="iconfont icon-552dc065f0478"></span>-->
+    </div>
+    <div class="header-content">{$top}</div>
+    <div class="header-right">
+        <!--<a class="iconfont icon-shezhix" style="color: white"password-reset.html href="/index/personal"></a>-->
+    </div>
+</div>
+
+<!-- 内容 -->
+<div class="content">
+    <!-- 公告 -->
+    <div class="notice">
+        <ul class="notice-content">
+            {foreach $notice as $v}
+            <li>{$v}</li>
+            {/foreach}
+        </ul>
+    </div>
+
+    <!-- 广告 -->
+    <div class="swiper-container" style="height: 14rem; width: 100%;">
+        <div class="swiper-wrapper">
+            {foreach $adv as $v}
+            <div class="swiper-slide" data-swiper-autoplay="2000"><img src="{$v['location']}" alt="{$v['describe']}">
+            </div>
+            {/foreach}
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+
+
+    <div class="assets">
+        <div class="assets-cell">
+            <p class="assets-cell-t">余额</p>
+            <p class="assets-cell-b">{$member['remind']}</p>
+        </div>
+        <div class="assets-cell">
+            <p class="assets-cell-t">积分</p>
+            <p class="assets-cell-b">{$member['integral']}</p>
+        </div>
+        <div class="assets-cell">
+            <p class="assets-cell-t">收入</p>
+            <p class="assets-cell-b">{$member['total']}</p>
+        </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <script src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/swiper.min.js"></script>
+    <script>
+        //公告
+        var top_ = -30;
+        if ($('.notice-content li').length > 1) {
+            setInterval(function () {
+                $('.notice-content').animate({
+                    marginTop: top_ + 'px'
+                }, 300, function () {
+                    top_ -= 30;
+                    if (top_ <= $('.notice-content li').length * -30) {
+                        top_ = -30;
+                        $('.notice-content').css('margin-top', '0px');
+                    }
+                });
+            }, 3000);
+        }
+
+        var mySwiper = new Swiper('.swiper-container', {
+            speed: 500,//播放速度
+            autoplayDisableOnInteraction: false,
+            autoplay: 2000,
+            autoHeight: true,
+            loop: true,//是否循环播放
+            //setWrapperSize: true,
+            pagination: '.swiper-pagination',//分页
+            effect: 'slide',//动画效果
+            centeredSlides: true,
+        });
+
+    </script>

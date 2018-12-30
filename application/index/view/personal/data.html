@@ -1,0 +1,46 @@
+{include file="index@Index/header"}
+
+<body style="background: #f4f4f4;">
+<!-- 顶部 -->
+<div id="header">
+    <div class="header-left">
+        <span class="iconfont icon-fanhui"></span>
+    </div>
+    <div class="header-content">个人资料</div>
+    <div class="header-right">
+    </div>
+</div>
+
+<!-- 内容 -->
+<div class="content">
+    <form id="forms" action="/index/self" method="post">
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">账号</label></div>
+                <div class="weui-cell__bd">
+                    <span>{$member['account']}</span>
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">昵称</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="nickname" value="{$member['nickname']}" placeholder="请输入昵称">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-btn">
+            <button class="weui-btn weui-btn_primary" type="submit">保存</button>
+        </div>
+    </form>
+</div>
+{include file="index@Index/floor"}
+<script src="{$src}js/ajax.js"></script>
+<script>
+    $('.icon-fanhui').on('click', function(){
+        location.href = '/index/personal';
+    });
+</script>
+
+</html>

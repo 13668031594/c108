@@ -1,0 +1,12 @@
+.idea
+composer.lock
+*.log
+application/config.php
+application/database.php
+files
+public/adv_image
+public/asset_in
+public/logo
+public/share
+public/welfare_image
+public/goods_image

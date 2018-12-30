@@ -1,0 +1,202 @@
+{include file="index@Index/header"}
+
+<body style="background: #f4f4f4;">
+<!-- 顶部 -->
+<div id="header">
+    <div class="header-left">
+        <span class="iconfont icon-fanhui"></span>
+    </div>
+    <div class="header-content">众筹</div>
+    <div class="header-right">
+    </div>
+</div>
+
+<!-- 内容 -->
+<div class="content">
+    <form id="forms" action="/index/crowd" method="post">
+        <!--<div class="weui-cells weui-cells_form">-->
+
+            <div class="weui-cells__title">拥有{$webAliasJpj}</div>
+            <div class="weui-cells">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <span>{$member['jpj']}</span>
+                        <!--<input class="weui-input" type="text" placeholder="请输入文本">-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="weui-cells__title">现金:{$webAliasJpj}</div>
+            <div class="weui-cells">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <span>{$webAjAmount}:{$webAjJpj}</span>
+                        <!--<input class="weui-input" type="text" placeholder="请输入文本">-->
+                        <input type="hidden" name="webAjAmount" value="{$webAjAmount}">
+                        <input type="hidden" name="webAjJpj" value="{$webAjJpj}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="weui-cells__title">众筹金额</div>
+            <div class="weui-cells">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <input class="weui-input num" type="number" name="amount" value="" placeholder="请输入众筹金额">
+                    </div>
+                </div>
+            </div>
+
+            <div class="weui-cells__title">支付密码</div>
+            <div class="weui-cells">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <input class="weui-input pass" type="password" name="pay_pass" value="" placeholder="请输入支付密码">
+                    </div>
+                </div>
+            </div>
+        <!--</div>-->
+
+        <div class="agreement">
+            <label for="weuiAgree" class="weui-agree">
+                <input id="weuiAgree" type="checkbox" class="weui-agree__checkbox" name=""/>
+                <span class="weui-agree__text">阅读并同意</span>
+            </label>
+            <a href="javascript:;" class="open-popup" data-target="#agreement">《相关协议》</a>
+        </div>
+
+        <div class="form-btn">
+            <button class="weui-btn weui-btn_primary" type="submit">提交</button>
+        </div>
+    </form>
+
+    <!-- 协议 -->
+    <div id="agreement" class="weui-popup__container" style="overflow: auto; background: white; padding: 1rem 1.5rem 4.5rem 1.5rem; width: 100%; box-sizing: border-box;">
+            {$content}
+            <div style="position: fixed; z-index: 1000; left: 0; bottom: 0; width: 100%;">
+                <button type="button" class='weui-btn weui-btn_plain-primary close-popup' onclick="$('#agreement').hide();" style="height: 4rem; background: white;">关闭</button>
+            </div>
+    </div>
+</div>
+{include file="index@Index/floor"}
+<script src="{$src}js/ajax.js"></script>
+<script>
+    $('.icon-fanhui').on('click', function(){
+        location.href = '/';
+    });
+
+    $('#forms').off('submit').on('submit', function(){
+        var str = '';
+        if( $('.num').val() == '' ) str += '请输入众筹{$webAliasJpj}数量 ';
+        if( $('.pass').val() == '' ) str += '请输入支付密码 ';
+        if( !$('#weuiAgree').is(':checked') ) str += '请阅读并同意相关协议 ';
+        if( str == '' ){
+            $.confirm("确定要执行此操作吗？", function() {
+                //点击确认后的回调函数
+                Ajax($('#forms'), deal);
+            }, function() {
+                //点击取消后的回调函数
+            });
+        }else{
+            $.alert(str);
+        }
+        return false;
+    });
+
+    function deal( resp ){
+        if( resp && resp.status == 'success' ){
+            //console.log('提交支付');
+            resp.wechat.timeStamp = resp.wechat.timeStamp.toString();
+            wechat_data = Object.assign({}, wechat_data, resp.wechat);
+            order_id = resp.order.id;
+            moneyPay();
+        }else{
+            if( resp.code == '999' ){
+                $.alert('登录失效');
+                window.location.href = '/index/login';
+            }else{
+                $.alert(resp.message);
+            }
+        }
+    }
+
+    var wechat_data = {};
+    var order_id = '';
+    var getStatus = null;
+    //支付判断是否在微信浏览器内
+    function moneyPay() {
+        if (typeof WeixinJSBridge == "undefined") {
+            if (document.addEventListener) {
+                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+            } else if (document.attachEvent) {
+                document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+            }
+        } else {
+            onBridgeReady();
+        }
+    }
+
+    //微信支付
+    function onBridgeReady() {
+        //getBrandWCPayRequest();
+        WeixinJSBridge.invoke('getBrandWCPayRequest', /*{
+                         "appId": 'appId',                  //公众号名称，由商户传入
+                         "timeStamp": 'timeStamp',          //时间戳，自1970年以来的秒数
+                         "nonceStr": 'nonceStr',            //随机串
+                         "package": 'package',              //订单详情
+                         "signType": 'signType',            //微信签名方式:
+                         "paySign": 'paySign'               //微信签名
+                    }*/wechat_data, function(res) {
+                //console.log('res', res);
+                if(res.err_msg == "get_brand_wcpay_request:ok"
+                )
+                {
+                    //window.location.replace("user_index.html");
+                    getStatus = setInterval(function (){
+
+                            $.showLoading('');
+
+                            $.ajax({
+                                type: 'get',
+                                url: '/index/crowd-info/' + order_id,//轮询路由
+                                dataType: 'json',
+                                success: function (resp) {
+                                    //console.log('data', resp);
+                                    if (resp && resp.status == 'success') {
+                                        $.hideLoading();
+                                        clearInterval(getStatus);
+                                        $.alert('支付成功！',function () {
+                                            window.location.href = '/';
+                                        });
+                                    }
+                                },
+                                error: function (data) {
+                                    $.toast(data.status, "text");
+                                }
+                            });
+                        },
+                        3000
+                    )
+                    ;
+                }
+                /*else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                                             alert("取消支付!");
+                                        } else {
+                                             alert("支付失败!");
+                                        }*/
+            } /*function(res){
+                         if(res.err_msg == "get_brand_wcpay_request:ok"){
+                              window.location.replace("user_index.html")
+                         }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
+                              alert("取消支付!");
+                         }else{
+                              alert("支付失败!");
+                         }
+                    }*/
+        )
+        ;
+    }
+</script>
+
+</html>

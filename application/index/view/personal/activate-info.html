@@ -1,0 +1,163 @@
+{include file="index@Index/header"}
+
+<body style="background: #f4f4f4;">
+<!-- 顶部 -->
+<div id="header">
+    <div class="header-left">
+        <span class="iconfont icon-fanhui"></span>
+    </div>
+    <div class="header-content">未完结订单</div>
+    <div class="header-right">
+    </div>
+</div>
+
+<!-- 内容 -->
+<div class="content">
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__hd">
+            <label class="weui-form-preview__label">付款金额</label>
+            <em class="weui-form-preview__value">{$order['total']}</em>
+        </div>
+
+        <div class="weui-form-preview__hd">
+            <label class="weui-form-preview__label">激活{$webAliasAsset}</label>
+            <em class="weui-form-preview__value">{$order['asset']}</em>
+        </div>
+
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">订单号</label>
+                <span class="weui-form-preview__value">{$order['order_number']}</span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">时间</label>
+                <span class="weui-form-preview__value">{$order['created_at']}</span>
+            </div>
+        </div>
+        <div class="weui-form-preview__ft">
+            <button type="button" class="weui-form-preview__btn weui-form-preview__btn_default cancel">撤销</button>
+            <button type="button" class="weui-form-preview__btn weui-form-preview__btn_primary pay-sure">付款</button>
+        </div>
+    </div>
+</div>
+
+{include file="index@Index/floor"}
+
+<script src="{$src}js/ajax.js"></script>
+<script>
+    $('.icon-fanhui').on('click', function () {
+        location.href = '/';
+    });
+
+    $('.cancel').on('click', function () {
+        console.log('123');
+        $.ajax({
+            type: 'get',
+            url: '/index/act-out/{$order["id"]}',//撤销路由
+            dataType: 'json',
+            success: function (resp) {
+                if (resp && resp.status == 'success') {
+                    $.alert('操作成功！',function () {
+                        window.location.href = '/index/crowd';
+                    });
+                } else {
+                    if (resp.code == '999') {
+                        $.alert('登录失效');
+                        window.location.href = '/index/login';
+                    } else {
+                        $.alert(resp.message);
+                    }
+                }
+            },
+            error: function (data) {
+                $.toast(data.status, "text");
+            }
+        });
+    });
+
+    $('.pay-sure').on('click', function () {
+        moneyPay();
+    });
+
+    var wechat_test = '{$wechat}';
+    var wechat_data = JSON.parse(wechat_test);
+    var order_id = '{$order["id"]}';
+    var getStatus = null;
+
+    //支付判断是否在微信浏览器内
+    function moneyPay() {
+        if (typeof WeixinJSBridge == "undefined") {
+            if (document.addEventListener) {
+                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+            } else if (document.attachEvent) {
+                document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+            }
+        } else {
+            onBridgeReady();
+        }
+    }
+
+    //微信支付
+    function onBridgeReady() {
+        //getBrandWCPayRequest();
+        WeixinJSBridge.invoke('getBrandWCPayRequest', /*{
+                         "appId": 'appId',                  //公众号名称，由商户传入
+                         "timeStamp": 'timeStamp',          //时间戳，自1970年以来的秒数
+                         "nonceStr": 'nonceStr',            //随机串
+                         "package": 'package',              //订单详情
+                         "signType": 'signType',            //微信签名方式:
+                         "paySign": 'paySign'               //微信签名
+                    }*/wechat_data, function(res) {
+                //console.log('res', res);
+                if(res.err_msg == "get_brand_wcpay_request:ok"
+                )
+                {
+                    //window.location.replace("user_index.html");
+                    getStatus = setInterval(function (){
+                            $.showLoading('');
+
+                            $.ajax({
+                                type: 'get',
+                                url: '/index/act-info/' + order_id,//轮询路由
+                                dataType: 'json',
+                                success: function (resp) {
+                                    //console.log('data', resp);
+                                    if (resp && resp.status == 'success') {
+                                        $.hideLoading();
+
+                                        clearInterval(getStatus);
+                                        $.alert('支付成功！',function () {
+                                            window.location.href = '/';
+                                        });
+                                    }
+                                },
+                                error: function (data) {
+                                    $.toast(data.status, "text");
+                                }
+                            });
+                        },
+                        3000
+                    )
+                    ;
+                }
+                /*else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                                             alert("取消支付!");
+                                        } else {
+                                             alert("支付失败!");
+                                        }*/
+            } /*function(res){
+                         if(res.err_msg == "get_brand_wcpay_request:ok"){
+                              window.location.replace("user_index.html")
+                         }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
+                              alert("取消支付!");
+                         }else{
+                              alert("支付失败!");
+                         }
+                    }*/
+        )
+        ;
+    }
+</script>
+
+</html>

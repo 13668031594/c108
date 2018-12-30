@@ -1,0 +1,73 @@
+
+{include file="index@Index/header"}
+<body>
+{include file="index@Index/header2"}
+        <!-- 菜单栏 -->
+        <ul class="menu">
+            <!--<li><a href="/index/crowd"><span class="iconfont icon-zhongchou" style="font-size: 2.7rem;"></span>众筹</a></li>-->
+            <!--<li><a href="/index/pay-note"><span class="iconfont icon-icon-" style="font-size: 2.7rem;"></span>钱包</a></li>-->
+            <li><a href="/index/exchange"><span class="iconfont icon-icon-" style="font-size: 2.1rem;"></span>报单</a></li>
+            <li><a href="/index/financial?type=2"><span class="iconfont icon-caiwu" style="font-size: 2.4rem;"></span>财务</a></li>
+            <li><a href="/index/shift-to-qr"><span class="iconfont icon-zhuanru" style="font-size: 2.1rem;"></span>转入</a></li>
+            <li><a href="/index/roll-out/0"><span class="iconfont icon-zhuanchu" style="font-size: 2.1rem;"></span>转出</a></li>
+            <!--<li><a href="/index/exchange"><span class="iconfont icon-zhuanhuan" style="font-size: 2.1rem;"></span>转换</a></li>-->
+            <!--<li><a href="/index/family"><span class="iconfont icon-jituanjiapu" style="font-size: 2.5rem;"></span>家谱</a></li>-->
+            <!--<li><a href="/index/memorial"><span class="iconfont icon-miao" style="font-size: 2.6rem;"></span>纪念堂</a></li>-->
+            <!--<li><a href="/index/act"><span class="iconfont icon-icon" style="font-size: 3rem;"></span>XXX激活</a></li>-->
+            <!--<li><a href="/index/information"><span class="iconfont icon-zixunzhongxin" style="font-size: 2rem;"></span>最新资讯</a>-->
+            <!--<li><a href="/index/shared"><span class="iconfont icon-gongxiang" style="font-size: 2.5rem;"></span>家族共享</a></li>-->
+            <!--<li><a href="/index/added"><span class="iconfont icon-zengzhifuwu" style="font-size: 2.2rem;"></span>增值服务</a></li>-->
+        </ul>
+{if !empty($first_login)}
+        <!-- 红包 -->
+        <div class="draw-gift">
+            <div class="draw-img">
+                <div class="draw-up hide"></div>
+                <div class="draw-up-up" id="draw-up-up"></div>
+                <div class="draw-mid draw-mid-move"></div>
+                <div class="draw-down"></div>
+                <div class="draw-down2"></div>
+                <div class="draw-list">
+                    <p class="draw-list-title">获得xxx</p>
+                </div>
+                <span class="draw-close">✕</span>
+            </div>
+            <!--<a href="javascript:;" id="draw-btn">点击打开</a>-->
+        </div>
+</div>
+{/if}
+{include file="index@Index/floor"}
+
+<script>
+    $("#draw-btn, .draw-img").on("click", function () {
+        $(".draw-mid").removeClass("draw-mid-move").css({display:"none"});
+        $(".draw-up").animate({
+            opacity: "1"
+        }, 100);
+        $("#draw-up-up").animate({
+            opacity: "1",
+            top: "-6rem"
+        }, 200);
+
+        $(".draw-down").animate({
+            opacity: "0"
+        }, 300);
+
+        $(".draw-close").show().on('click', function(){
+            $('.draw-gift').hide();
+        });
+
+        /*setTimeout(function(){
+            $('.draw-gift').hide();
+        }, 1000);*/
+        /*$(".draw-down2").animate({
+            opacity: "1"
+        }, 300);*/
+        $(".draw-list").animate({opacity:"1"},600).animate({top:"-3rem"},1000);
+    });
+</script>
+
+</html>
+
+
+

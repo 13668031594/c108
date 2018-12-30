@@ -1,0 +1,106 @@
+{include file="index@Index/header"}
+<body>
+{include file="index@Index/header2"}
+<!-- 导航栏 -->
+<div class="navigation">
+    <!-- 选中class：nav-item-choice -->
+    <a href="/index/information" class="nav-item">官方公告</a>
+    <a href="/index/information-hy" class="nav-item nav-item-choice">行业资讯</a>
+</div>
+
+<div class="weui-panel weui-panel_access">
+    <div class="weui-panel__hd">行业资讯</div>
+    <div class="weui-panel__bd">
+        {foreach $article['message'] as $v}
+        <!-- 一项开始 -->
+        <a href="/index/information-info/{$v['id']}" class="weui-media-box weui-media-box_appmsg">
+            <div class="weui-media-box__bd">
+                <h4 class="weui-media-box__title">{$v['title']}</h4>
+                <div class="list-author-time">
+                    <div class="list-author">
+                        <span>作者：</span>
+                        <span>{$v['author']}</span>
+                    </div>
+
+                    <div class="list-time">
+                        <span>时间：</span>
+                        <span>{$v['created_at']}</span>
+                    </div>
+                </div>
+                <p class="weui-media-box__desc">{$v['describe']}</p>
+            </div>
+        </a>
+        <!-- 一项结束 -->
+        {/foreach}
+    </div>
+</div>
+
+<!-- 加载 -->
+<div class="weui-loadmore">
+    <i class="weui-loading"></i>
+    <span class="weui-loadmore__tips">正在加载</span>
+</div>
+
+<div class="not-more"><i></i><span>暂无数据</span><i></i></div>
+{include file="index@Index/floor"}
+<script>
+
+    //滚动加载
+    var loading = true;  //状态标记
+    var stop = false;
+    var page = 2;
+    var all = 2;
+    $('.weui-loadmore').hide();
+    $(document.body).infinite().on("infinite", function () {
+        if (loading && !stop) {
+            loading = false;
+            $.ajax({
+                type: 'get',
+                url: '/index/information-hy-table?page=' + page,
+                dataType: 'json',
+                beforeSend: function () {
+                    $('.weui-loadmore').show();
+                },
+                success: function (resp) {
+                    //console.log('data', resp);
+                    if (resp && resp.status == 'success') {
+                        var list = resp.message;
+                        all = Math.ceil(Number(resp.total)/20);
+                        if( list.length > 0 ){
+                            var str = '';
+                            list.forEach(function (i) {
+                                str += '<div class="weui-media-box weui-media-box_appmsg">' +
+                                    '<div class="weui-media-box__bd"><h4 class="weui-media-box__title">' + i.title + '</h4>' +
+                                    '<div class="list-author-time"><div class="list-author"><span>作者：</span><span>' + i.author + '</span></div>' +
+                                    '<div class="list-time"><span>时间：</span><span>' + i.created_at + '</span></div></div>' +
+                                    '<p class="weui-media-box__desc">'+ i.describe +'</p></div></div>';
+                            });
+                            $(".weui-panel__bd").append(str);
+                        }
+                        page++;
+                        if (page > all) {
+                            stop = true;
+                            $('.weui-loadmore').hide();
+                            $('.not-more').show();
+                        }
+                    } else {
+                        if( resp.code == '999' ){
+                            $.alert('登录失效');
+                            window.location.href = '/index/login';
+                        }else{
+                            $.alert(resp.message);
+                        }
+                    }
+                },
+                error: function (data) {
+                    $('.weui-loadmore').hide();
+                    $.toast(data.status, "text");
+                }
+            });
+        }
+        ;
+    });
+
+</script>
+
+</html>

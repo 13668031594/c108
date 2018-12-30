@@ -1,0 +1,26 @@
+
+<!-- 底部tab -->
+<div class="weui-tabbar">
+    <!-- 选中添加class：weui-bar__item--on -->
+    <a href="/" class="weui-tabbar__item {if session('floor') == 'index'}weui-bar__item--on{/if}">
+        <div class="weui-tabbar__icon">
+            <span class="iconfont icon-zhuye tab-icon"></span>
+        </div>
+        <p class="weui-tabbar__label">主页</p>
+    </a>
+    <!--<a href="http://t.cn/EAogS2W" class="weui-tabbar__item">
+        <div class="weui-tabbar__icon">
+            <span class="iconfont icon-shangcheng tab-icon"></span>
+        </div>
+        <p class="weui-tabbar__label">商城</p>
+    </a>-->
+    <a href="/index/personal" class="weui-tabbar__item {if session('floor') == 'self'}weui-bar__item--on{/if}">
+        <div class="weui-tabbar__icon">
+            <span class="iconfont icon-gerenzhongxinwoderenwubiaozhuntouxianxing tab-icon"></span>
+        </div>
+        <p class="weui-tabbar__label">我的</p>
+    </a>
+</div>
+</body>
+
+

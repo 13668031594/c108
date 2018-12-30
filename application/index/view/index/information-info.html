@@ -1,0 +1,29 @@
+{include file="index@Index/header"}
+<body>
+<!-- 顶部 -->
+<div id="header">
+    <div class="header-left">
+        <span class="iconfont icon-552dc065f0478"></span>
+    </div>
+    <div class="header-content">资讯中心</div>
+    <div class="header-right">
+        <span class="iconfont icon-shezhix"></span>
+    </div>
+</div>
+
+<!-- 内容 -->
+<div class="content">
+    <div class="article-title">{$title}</div>
+    <div class="article-author-time">
+        <div>作者：{$author}</div>
+        <div>时间：{$created_at}</div>
+    </div>
+    <div class="article-author-time">
+        <div>描述：{$describe}</div>
+    </div>
+    <div class="article-content">{$content}</div>
+</div>
+
+{include file="index@Index/floor"}
+
+</html>

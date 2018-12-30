@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"> <!-- 移动端声明，按1比例缩放，禁止用户缩放 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="format-detection" content="telephone=yes"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="format-detection" content="telephone=no"/> <!-- 禁止自动识别为电话号码 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.3/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.1/css/jquery-weui.min.css">
+    <link rel="stylesheet" type="text/css" href="{$src}css/login.css"/>
+</head>
+
+<body>
+    <div class="login">
+        <div class="login-title">注册</div>
+        <form class="forms" action="/index/reg" method="post">
+            <input type="text" class="form-input username" name="account" value="" maxlength="11" placeholder="请输入手机号码"/>
+            <input type="password" class="form-input password" name="pass" value="" placeholder="请输入密码"/>
+            <input type="password" class="form-input password-sure" name="again" value="" placeholder="请确认密码"/>
+            <div class="form-cell">
+                <input type="number" maxlength="5" class="form-input phone-code" name="code" value="" placeholder="手机验证码"/>
+                <span class="code-btn">获取验证码</span>
+            </div>
+            <input type="text" class="form-input" name="referee_account" value="{if !is_null($referee_account)}{$referee_account}{/if}" placeholder="请输入推广账号"/>
+            <button class="form-btn" type="submit">注册</button>
+        </form>
+
+        <div class="register-bottom">
+            <a href="/index/login">去登录</a>
+        </div>
+
+        <!-- 背景 -->
+        <div class="login-out"></div>
+    </div>
+
+    <input type="hidden" id="hint" value="{if !is_null($errors)}{$errors}{/if}"/>
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/jquery-weui.min.js"></script>
+<script src="{$src}js/ajax.js"></script>
+<script>
+    var timer = null;
+    var num = 120;
+    var can_get_code = true;
+
+    $('.forms').submit(function(){
+        var str = '';
+        if( $('.username').val() == '' ) str += '请输入手机号码 ';
+        if( $('.password').val() == '' ) str += '请输入密码 ';
+        if( $('.password-sure').val() != $('.password').val() ) str += '两次输入密码不相同 ';
+        if( $('.phone-code').val() == '' ) str += '请输入手机验证码 ';
+        if( str != '' ){
+            $.alert(str, '提示');
+        }else{
+            Ajax($('.forms'), del);
+        }
+        return false;
+    });
+
+    function del(resp){
+        if( resp && resp.status == 'success' ){
+            $.alert("注册成功", function() {
+                //点击确认后的回调函数
+                window.location.href = '/index/login';
+            });
+        }else{
+            $.alert(resp.message);
+        }
+    }
+
+    $('.code-btn').on('touchend', getCode);
+
+    //获取短信验证码
+    function getCode(){
+        if( $('.username').val() != '' ){
+            if( can_get_code ){
+                can_get_code = false;
+                $.ajax({
+                    type: 'get',
+                    url: '/index/reg-sms/' + $('.username').val(),
+                    dataType: 'json',
+                    success: function(resp){
+                        //console.log('短信验证码', resp);
+                        if( resp && resp.status == 'success' ){
+                            window.localStorage.setItem('code_times', JSON.stringify(resp.time + '000'));
+                            $('.code-btn').text( '重新获取(' + num + ')' );
+                            timer = setInterval(countDown, 1000);
+                        }else{
+                            if( resp.code == '001' ){
+                                num = resp.message;
+                                $('.code-btn').text( '重新获取(' + num + ')' );
+                                timer = setInterval(countDown, 1000);
+                            }else{
+                                can_get_code = true;
+                                clearInterval(timer);
+                                num = 120;
+                                $('.code-btn').text( '获取验证码' );
+                                $.alert(resp.message, '提示');
+                            }
+                        }
+                    },
+                    error: function (data) {
+                        //console.log('error', data);
+                        $.toast(data.status, "text");
+                    }
+                });
+            }
+        }else{
+            $.alert( '请先输入手机号，再点击获取短信验证码。', '提示' );
+        }
+    }
+
+    //获取验证码的获取间隔时间
+    function getTime(){
+        var code_time = Number(JSON.parse(window.localStorage.getItem('code_times')));
+        var now_time = Number(Date.parse(new Date()));
+        if( code_time && now_time < code_time  ){
+            can_get_code = false;
+            num = (code_time - now_time) / 1000;
+            $('.code-btn').text( '重新获取(' + num + ')' );
+            timer = setInterval(countDown, 1000);
+        }
+    }
+
+    //倒计时
+    function countDown(){
+        if (num == 0) {
+            clearInterval(timer);
+            window.localStorage.removeItem('code_times');
+            $('.code-btn').text( '获取验证码' );
+            num = 120;
+            can_get_code = true;
+        } else {
+            num--;
+            $('.code-btn').text( '重新获取(' + num + ')' );
+        }
+    }
+
+    getTime();
+</script>
+
+</html>
