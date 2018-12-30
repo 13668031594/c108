@@ -14,25 +14,27 @@
 <!-- 内容 -->
 <div class="content">
     <div class="goods-images">
-        <img src="{$src}images/index/notice.jpeg" />
+        {foreach $images as $v}
+        <img src="{$v['location']}" />
+        {/foreach}
     </div>
     <div class="weui-form-preview">
         <div class="weui-form-preview__hd">
             <label class="weui-form-preview__label">付款金额</label>
-            <em class="weui-form-preview__value">¥2400.00</em>
+            <em class="weui-form-preview__value">¥{$self['amount']}</em>
         </div>
         <div class="weui-form-preview__bd">
             <div class="weui-form-preview__item">
                 <label class="weui-form-preview__label">商品</label>
-                <span class="weui-form-preview__value">电动打蛋机</span>
+                <span class="weui-form-preview__value">{$self['name']}</span>
             </div>
             <div class="weui-form-preview__item">
-                <label class="weui-form-preview__label">标题标题</label>
-                <span class="weui-form-preview__value">名字名字名字</span>
+                <label class="weui-form-preview__label">描述</label>
+                <span class="weui-form-preview__value">{$self['describe']}</span>
             </div>
             <div class="weui-form-preview__item">
-                <label class="weui-form-preview__label">标题标题</label>
-                <span class="weui-form-preview__value">很长很长的名字很长很长的名字很长很长的名字很长很长的名字很长很长的名字</span>
+                <label class="weui-form-preview__label">详情</label>
+                <span class="weui-form-preview__value">{php}echo $content;{/php}</span>
             </div>
         </div>
         <!--<div class="weui-form-preview__ft">
@@ -40,12 +42,31 @@
             <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">确认支付</button>
         </div>-->
     </div>
-    <form id="forms" action="/index/pay-pass" method="post">
+    <form id="forms" action="/index/exchange" method="post">
+        <input type="hidden" name="radio" value="{$self['code']}|{$self['amount']}">
     <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">收货人</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" name="man" id='man' value="" placeholder="请输入收货人">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" name="phone" id='phone' value="" placeholder="请输入收货联系电话">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">收货地址</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" name="address" id='address' value="" placeholder="请输入收货地址">
+            </div>
+        </div>
         <div class="weui-cell">
             <div class="weui-cell__hd"><label class="weui-label">支付密码</label></div>
             <div class="weui-cell__bd">
-                <input class="weui-input" type="password" name="payPass" id='payPass' value="" placeholder="请输入支付密码">
+                <input class="weui-input" type="password" name="pay_pass" id='payPass' value="" placeholder="请输入支付密码">
             </div>
         </div>
     </div>
@@ -64,6 +85,21 @@
 
     $('#forms').off('submit').on('submit', function(){
         var payPass = $("#payPass").val() ;
+        var man = $("#man").val() ;
+        var phone = $("#phone").val() ;
+        var address = $("#address").val() ;
+        if( !address ){
+            $.alert('请输入收货地址');
+            return false ;
+        }
+        if( !phone ){
+            $.alert('请输入联系电话');
+            return false ;
+        }
+        if( !man ){
+            $.alert('请输入收货人姓名');
+            return false ;
+        }
         if( !payPass ){
             $.alert('请输入支付密码');
             return false ;

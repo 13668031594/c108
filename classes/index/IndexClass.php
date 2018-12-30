@@ -10,9 +10,13 @@ namespace classes\index;
 
 use app\adv\model\AdvModel;
 use app\bank\model\BankModel;
+use app\goods\model\GoodsContentModel;
+use app\goods\model\GoodsImagesModel;
 use app\goods\model\GoodsModel;
 use app\member\model\MemberModel;
 use app\notice\model\NoticeModel;
+use app\withdraw\model\WithdrawModel;
+use classes\goods\GoodsClass;
 use classes\member\MemberClass;
 use classes\system\SystemClass;
 
@@ -158,11 +162,11 @@ class IndexClass extends \classes\IndexClass
         $member['bank_no'] = input('bank_no');
         $member['bank_man'] = input('bank_man');
         $member['nickname'] = input('nickname');
-        if (!empty(input('bank_id'))){
+        if (!empty(input('bank_id'))) {
 
             $bank = new BankModel();
-            $bank = $bank->where('id','=',input('bank_id'))->find();
-            if (!is_null($bank)){
+            $bank = $bank->where('id', '=', input('bank_id'))->find();
+            if (!is_null($bank)) {
 
                 $member['bank_id'] = $bank->id;
                 $member['bank_name'] = $bank->name;
@@ -334,12 +338,74 @@ class IndexClass extends \classes\IndexClass
         return $result;
     }
 
+    //银行列表
     public function bank()
     {
         $model = new BankModel();
 
-        $result = $model->order('sort','asc')->column('*');
+        $result = $model->order('sort', 'asc')->column('*');
 
         return $result;
+    }
+
+    public function goods_info()
+    {
+        $id = input('id');
+        if (is_null($id)) exit('参数错误');
+
+        //产品
+        $model = new GoodsModel();
+        $model = $model->where('id', '=', $id)->find();
+        if (is_null($model)) exit('产品不存在');
+
+        $model->location = is_null($model->location) ? config('young.image_not_found') : $model->location;
+
+        $model = $model->getData();
+
+        //图片
+        $images = new GoodsImagesModel();
+        $images = $images->where('pid', '=', $id)->where('id', '<>', $model['cover'])->column('*');
+        $image = [];
+        $i = 1;
+        foreach ($images as $k => $v) {
+
+            $image[$i]['id'] = $v['id'];
+            $image[$i]['location'] = is_null($v['location']) ? config('young.image_not_found') : $v['location'];
+
+            $i++;
+        }
+        ksort($image);
+
+        //正文
+        $content = new GoodsContentModel();
+        $content = $content->where('pid', '=', $id)->find();
+
+        //集合
+        return [
+            'self' => $model,
+            'images' => $image,
+            'content' => $content ? $content->content : ''
+        ];
+    }
+
+    public function withdraw_list()
+    {
+        $model = new WithdrawModel();
+
+        $status = $model->statues;
+
+        $member = parent::member();
+
+        $other = [
+            'where' => [
+                'id' => ['=',$member['id']]
+            ]
+        ];
+
+        $list = parent::page($model,$other);
+
+        $list['status'] = $status;
+
+        return $list;
     }
 }

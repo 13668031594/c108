@@ -9,10 +9,12 @@
 namespace classes\index;
 
 
+use app\goods\model\GoodsModel;
 use app\member\model\MemberModel;
 use app\member\model\MemberRecordModel;
 use app\order\model\OrderModel;
 use app\trade\model\TradeModel;
+use app\withdraw\model\WithdrawModel;
 use classes\system\SystemClass;
 use think\Db;
 use think\Request;
@@ -173,6 +175,19 @@ class AssetChangeClass extends \classes\IndexClass
     //报单验证
     public function validator_exchange(Request $request)
     {
+        //验证条件
+        $rule = [
+            'pay_pass|支付密码' => 'require|length:1,255',
+            'man|收货人' => 'require|length:1,255',
+            'phone|联系电话' => 'require|length:1,255',
+            'address|收货地址' => 'require|length:1,255',
+        ];
+
+        //验证
+        $result = parent::validator($request->post(), $rule);
+        //有错误报告则报错
+        if (!is_null($result)) parent::ajax_exception(000, $result);
+
         //会员信息
         $member = parent::member();
 
@@ -223,6 +238,9 @@ class AssetChangeClass extends \classes\IndexClass
         $order_model->member_account = $member['account'];
         $order_model->member_nickname = $member['nickname'];
         $order_model->member_phone = $member['phone'];
+        $order_model->man = $request->post('man');
+        $order_model->phone = $request->post('phone');
+        $order_model->address = $request->post('address');
         $order_model->created_at = $this->date;
         $order_model->save();
 
@@ -233,13 +251,16 @@ class AssetChangeClass extends \classes\IndexClass
         $member->grade = $after;
         $member->save();
 
+        $goods = new GoodsModel();
+        $goods = $goods->where('code' ,'=',$level)->find();
+
         //初始化会员记录
         $record = new MemberRecordModel();
         $record->member_id = $member->id;
         $record->account = $member->account;
         $record->nickname = $member->nickname;
         $record->remind = 0 - $remind;
-        $record->content = '报单『' . $order[$level] . '』会员等级由『' . $grades[$before] . '』变为『' . $grades[$after] . '』支付余额『' . $remind . '』';
+        $record->content = '报单『' . $goods->name . '('.$order[$level].')』会员等级由『' . $grades[$before] . '』变为『' . $grades[$after] . '』支付余额『' . $remind . '』';
         $record->integral_now = $member->integral;
         $record->integral_all = $member->integral_all;
         $record->remind_now = $member->remind;
@@ -641,11 +662,62 @@ class AssetChangeClass extends \classes\IndexClass
         $number = number_format($data['number'], 2, '.', '');
         if ($number != $data['number']) parent::ajax_exception(000, '提现金额至多精确到2位小数');
 
-            //验证手续费
-            $div = number_format(($number * $data['poundage'] / 100), 2, '.', '');
+        //验证手续费
+        $div = number_format(($number * $data['poundage'] / 100), 2, '.', '');
         if ($div != $data['div']) parent::ajax_exception(000, '请刷新重试（div）');
 
         //验证提现后余额
-//        $after = ($member['remind'] >= ($div + $number))
+        $after = number_format(($member['remind'] - $number), 2, '.', '');
+        if ($after != $data['after']) parent::ajax_exception(000, '请刷新重试（after）');
+
+        //验证实际获得金额
+        $withdraw = number_format(($number - $div), 2, '.', '');
+        if ($withdraw != $data['withdraw']) parent::ajax_exception(000, '请刷新重试（withdraw）');
+
+        //验证倍数信息
+        if ($number < $data['base']) parent::ajax_exception(000, '提现金额必须大于：'.$data['base']);
+        if (!empty(($number % $data['times']))) parent::ajax_exception(000, '提现金额必须是『'.$data['times'].'』的倍数');
+
+        Db::startTrans();
+
+        //修改会员信息
+        $model = new MemberModel();
+        $model = $model->where('id','=',$member['id'])->find();
+        $model->remind -= $number;
+        $model->integral += $div;
+        $model->save();
+
+        //建立订单
+        $order = new WithdrawModel();
+        $order->order_number = self::new_withdraw();
+        $order->total = $withdraw;
+        $order->remind = $number;
+        $order->integral = $div;
+        $order->poundage = $data['poundage'];
+        $order->member_id = $member['id'];
+        $order->member_account = $member['account'];
+        $order->member_phone = $member['phone'];
+        $order->member_nickname = $member['nickname'];
+        $order->member_create = $member['created_at'];
+        $order->bank_id = $member['bank_id'] ? $member['bank_id'] : '0';
+        $order->bank_no = $member['bank_no'];
+        $order->bank_name = $member['bank_name'];
+        $order->bank_man = $member['bank_man'];
+        $order->created_at = $model->updated_at;
+
+        Db::commit();
     }
+
+    private function new_withdraw()
+    {
+        $order = 'w' . time() . rand(100, 999);
+
+        $model = new WithdrawModel();
+        $test = $model->where('order_number', '=', $order)->find();
+
+        if ($test) return self::new_order();
+
+        return $order;
+    }
+
 }

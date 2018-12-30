@@ -150,8 +150,30 @@ class IndexController extends \app\http\controller\IndexController
         return parent::view('added', $result);
     }
 
+    //提现页面
     public function withdraw()
     {
         return parent::view('withdraw');
+    }
+
+    //提现记录
+    public function withdraw_list()
+    {
+        $result = $this->class->withdraw_list();
+
+        if (!empty(input('page'))){
+
+            return parent::tables($result);
+        }
+
+        return parent::view('withdraw_list',$result);
+    }
+
+    //报单详情
+    public function goods()
+    {
+        $result = $this->class->goods_info();
+
+        return parent::view('goods-details', $result);
     }
 }

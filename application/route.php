@@ -75,6 +75,8 @@ Route::get('index/worship','index/Index/worship');//祭拜
 Route::get('index/added','index/Index/added');//增值服务worship.html
 Route::get('index/withdraw', 'index/Index/withdraw');//提现
 Route::post('index/withdraw', 'index/Assetchange/withdraw');//提现
+Route::get('index/goods', 'index/Index/goods');//产品详情
+Route::get('index/withdraw-list','index/Index/withdraw_list');//提现页面
 
 //个人中心
 Route::get('index/personal', 'index/Personal/personal');

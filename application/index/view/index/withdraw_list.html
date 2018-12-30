@@ -1,0 +1,146 @@
+{include file="index@Index/header"}
+
+<body style="background: #f4f4f4;">
+<!-- 顶部 -->
+<div id="header">
+    <div class="header-left">
+        <span class="iconfont icon-fanhui"></span>
+    </div>
+    <div class="header-content">提现记录</div>
+    <div class="header-right">
+    </div>
+</div>
+
+<!-- 内容 -->
+<div class="content">
+    <!--<ul class="integral-info">
+        <li>
+            <p>余额</p>
+            <p>{$member['remind']}</p>
+        </li>
+        <li>
+            <p>积分</p>
+            <p>{$member['integral']}</p>
+        </li>
+        <li>
+            <p>收入</p>
+            <p>{$member['total']}</p>
+        </li>
+    </ul>-->
+
+    {foreach $message as $v}
+    <div id="panel-content">
+        <div class="weui-panel weui-panel_access">
+            <div class="weui-panel__hd">单号：{$v['order_number']}</div>
+            <div class="weui-panel__bd">
+                <!-- 一项开始 -->
+                <div class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-media-box__bd">
+                        <div class="list-author-time">
+                            <div class="list-time">
+                                <span>时间：</span>
+                                <span>{$v['created_at']}</span>
+                            </div>
+                        </div>
+                        <div class="list-author-time">
+                            <div class="list-time">
+                                <span>金额：</span>
+                                <span>{$v['total']}</span>
+                            </div>
+                        </div>
+                        <div class="list-author-time">
+                            <div class="list-time">
+                                <span>积分：</span>
+                                <span>{$v['integral']}</span>
+                            </div>
+                        </div>
+                        <div class="list-author-time">
+                            <div class="list-time">
+                                <span>状态：</span>
+                                <span>{$status[$v['status']]}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 一项结束 -->
+            </div>
+        </div>
+    </div>
+    {/foreach}
+
+
+    <!-- 加载 -->
+    <div class="weui-loadmore">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
+    </div>
+
+    <div class="not-more"><i></i><span>暂无数据</span><i></i></div>
+</div>
+{include file="index@Index/floor"}
+<script src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/swiper.min.js"></script>
+<script>
+    $('.icon-fanhui').on('click', function(){
+        location.href = '/';
+    });
+
+
+    //滚动加载
+    var loading = true;  //状态标记
+    var stop = false;
+    var page = 2;
+    var all = 2;
+    $('.weui-loadmore').hide();
+    $(document.body).infinite().on("infinite", function() {
+        if(loading && !stop){
+            loading = false;
+            $.ajax({
+                type: 'get',
+                url: '/index/withdraw-list?page='+page,
+                dataType: 'json',
+                beforeSend: function(){
+                    $('.weui-loadmore').show();
+                },
+                success: function(resp){
+                    //console.log('data', resp);
+                    if( resp && resp.status == 'success' ){
+                        var list = resp.message;
+                        all = Math.ceil(Number(resp.total)/20);
+                        if( list.length > 0 ){
+                            var str = '';
+                            list.forEach(function( i ){
+                                str += '<div class="weui-panel weui-panel_access"><div class="weui-panel__hd">' + i.trade_type +'：' + i.order_number +'</div>' +
+                                    '<div class="weui-panel__bd"><div class="weui-media-box weui-media-box_appmsg"><div class="weui-media-box__bd">' +
+                                    '<div class="list-author-time">' +
+                                    '<div class="list-time"><span>时间：</span><span>'+ i.make_time +'</span></div></div>' +
+                                    '<div class="list-author-time">' +
+                                    '<div class="list-time"><span>金额：</span><span>'+ i.total +'</span></div></div></div></div></div></div>';
+                            });
+                            $("#panel-content").append(str);
+                        }
+                        page ++;
+                        if( page > all ){
+                            stop = true;
+                            $('.weui-loadmore').hide();
+                            $('.not-more').show();
+                        }
+                    }else{
+                        if( resp.code == '999' ){
+                            $.alert('登录失效');
+                            window.location.href = '/index/login';
+                        }else{
+                            $.alert(resp.message);
+                        }
+                    }
+                },
+                error: function (data) {
+                    console.log('error', data);
+                    $('.weui-loadmore').hide();
+                    $.toast(data.status, "text");
+                }
+            });
+        };
+    });
+</script>
+
+</html>

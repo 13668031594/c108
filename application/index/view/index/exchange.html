@@ -31,11 +31,39 @@
     </ul>
     <!--  纯文字 -->
 
-    <div class="weui-panel weui-panel_access">
-        <div class="weui-panel__hd">我是一个文字</div>
-        <div class="weui-panel__hd">我也是一个文字</div>
-    </div>
 
+    <div class="weui-panel weui-panel_access">
+        {if count($gradess) > 0}
+        <div class="weui-panel__bd">
+            {foreach $gradess as $k => $v}
+            <a href="/index/goods?id={$v['id']}" class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" src="{$v['location']}">
+                </div>
+                <div class="weui-media-box__bd">
+                    <h4 class="weui-media-box__title">{$v['name']}</h4>
+                    <h4 class="weui-media-box__title">{$v['describe']}</h4>
+                    <p class="weui-media-box__desc">&yen;{$v['amount']}</p>
+                </div>
+            </a>
+            {/foreach}
+        </div>
+        {else/}
+        {if $members['grade'] == '3'}
+        <div class="weui-panel__hd">直推{$set['levelDirectorAgent']}个{$member_grades['3']}，当前{$members['child']}</div>
+        <div class="weui-panel__hd">团队业绩达到{$set['levelDirectorTotal']}</div>
+        <div class="weui-panel__hd">即可晋升为{$member_grades['4']}</div>
+        {/if}
+        {if $members['grade'] == '4'}
+        <div class="weui-panel__hd">直推{$set['levelChairmanDirector']}个{$member_grades['4']}，当前{$members['child']}</div>
+        <div class="weui-panel__hd">团队业绩达到{$set['levelChairmanTotal']}</div>
+        <div class="weui-panel__hd">即可晋升为{$member_grades['5']}</div>
+        {/if}
+        {if $members['grade'] == '5'}
+        <div class="weui-panel__hd">您已经是最高等级的会员了！</div>
+        {/if}
+        {/if}
+    </div>
     <!--  小图 -->
     <!--
     <div class="weui-cells">
@@ -170,15 +198,15 @@
 {include file="index@Index/floor"}
 <script src="{$src}js/ajax.js"></script>
 <script>
-    $('.icon-fanhui').on('click', function(){
+    $('.icon-fanhui').on('click', function () {
         location.href = '/';
     });
 
-    $('#forms').off('submit').on('submit', function(){
-        $.confirm("确定要执行此操作吗？", function() {
+    $('#forms').off('submit').on('submit', function () {
+        $.confirm("确定要执行此操作吗？", function () {
             //点击确认后的回调函数
             Ajax($('#forms'));
-        }, function() {
+        }, function () {
             //点击取消后的回调函数
         });
         return false;
