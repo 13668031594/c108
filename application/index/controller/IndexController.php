@@ -129,8 +129,9 @@ class IndexController extends \app\http\controller\IndexController
     public function exchange()
     {
         $result = $this->class->up_grades();
-
+        //print_r($result) ;
         return parent::view('exchange', $result);
+        //return parent::view('goods-details',$result);
     }
 
     //祭拜

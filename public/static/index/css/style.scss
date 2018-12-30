@@ -884,3 +884,13 @@
         }
     }
 }
+
+.goods-images{
+    height:200px;
+    >img{
+        max-width:100%;
+        height:auto;
+        -webkit-background-size: 100%;
+        background-size: 100%;
+    }
+}

@@ -1,4 +1,4 @@
-activate.html{include file="index@Index/header"}
+{include file="index@Index/header"}
 
 <body style="background: #f4f4f4;">
 <!-- 顶部 -->
@@ -29,7 +29,51 @@ activate.html{include file="index@Index/header"}
             <p>{$members['total_all']}</p>
         </li>
     </ul>
+    <!--  纯文字 -->
 
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__hd">我是一个文字</div>
+        <div class="weui-panel__hd">我也是一个文字</div>
+    </div>
+
+    <!--  小图 -->
+    <!--
+    <div class="weui-cells">
+        {if count($gradess) > 0}
+        {foreach $gradess as $k => $v}
+        <a class="weui-cell weui-cell_access" href="javascript:;">
+            <div class="weui-cell__hd"><img src={$v['location']}></div>
+            <div class="weui-cell__bd">
+                <p>{$v['describe']}</p>
+            </div>
+            <div class="weui-cell__ft">&yen;{$v['amount']}</div>
+
+        </a>
+        {/foreach}
+        {/if}
+    </div>
+    -->
+    <!-- 大图 -->
+    <!--
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__bd">
+            {if count($gradess) > 0}
+            {foreach $gradess as $k => $v}
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" src="{$v['location']}">
+                </div>
+                <div class="weui-media-box__bd">
+                    <h4 class="weui-media-box__title">{$v['describe']}</h4>
+                    <p class="weui-media-box__desc">&yen;{$v['amount']}</p>
+                </div>
+            </a>
+            {/foreach}
+            {/if}
+        </div>
+    </div>
+    -->
+    <!-- 老版
     <form id="forms" action="/index/exchange" method="post">
         {if count($grades) > 0}
         <div class="weui-cells weui-cells_radio">
@@ -49,7 +93,7 @@ activate.html{include file="index@Index/header"}
 
         <div class="weui-cells weui-cells_form">
 
-            <!--<div class="weui-cells__tips">至少转换数量为100且为100的倍数</div>-->
+
 
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">支付密码</label></div>
@@ -120,7 +164,9 @@ activate.html{include file="index@Index/header"}
         {/if}
 
     </form>
+    -->
 </div>
+</body>
 {include file="index@Index/floor"}
 <script src="{$src}js/ajax.js"></script>
 <script>
