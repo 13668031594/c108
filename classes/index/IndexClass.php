@@ -269,11 +269,12 @@ class IndexClass extends \classes\IndexClass
             $goods = new GoodsModel();
             $goods = $goods->whereIn('code', array_keys($gradess))->order('sort', 'asc')->column('*');
             foreach ($goods as &$v) if (is_null($v['location']) || !file_exists(substr($v['location'], 1))) $v['location'] = config('young.image_not_found');
-            $result['grades'] = $goods;
+            $result['gradess'] = $goods;
         } else {
 
-            $result['grades'] = [];
+            $result['gradess'] = [];
         }
+        $result['grades'] = $gradess;
 
 
         //获取等级
