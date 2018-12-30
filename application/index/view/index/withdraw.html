@@ -13,11 +13,19 @@
 <!-- 内容 -->
 <div class="content">
     <form id="forms" action="/index/withdraw" method="post">
+        <input type="hidden" name="base" id="base" value="{$set['withdrawBase']}" />
+        <input type="hidden" name="times" id="times" value="{$set['withdrawTimes']}" />
+        <input type="hidden" name="poundage"  value="{$set['withdrawPoundage']}" />
+
+        <input type="hidden" name="after" id="after"  value="{$set['withdrawPoundage']}" />
+        <input type="hidden" name="before"  value="{$member['remind']}" />
+
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">当前余额</label></div>
                 <div class="weui-cell__bd">
-                    {$member['remind']}
+                    <span id="balance">{$member['remind']}</span>
+
                 </div>
             </div>
 
@@ -38,23 +46,31 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">手续费</label></div>
                 <div class="weui-cell__bd">
-                    {$set['withdrawPoundage']}%
+                    <span id="poundage">{$set['withdrawPoundage']}</span>%
                 </div>
             </div>
 
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">转出数额</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" name="number" value="" placeholder="请输入转出数额">
+                    <input class="weui-input" onkeyup="js(this)"  id="number" type="number" name="number" value="" placeholder="请输入转出数额">
                 </div>
             </div>
 
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">支付密码</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="password" name="pay" value="" placeholder="请输入交易密码">
+                    <input class="weui-input" type="password" id="pay" name="pay" value="" placeholder="请输入交易密码">
                 </div>
             </div>
+        </div>
+
+        <div style="font-size:16px;text-align: center;margin-top:15px;">手续费：&yen;<span id="poundageAmount">0.00</span>
+            <input type="hidden" name="div" id="div" value="0" />
+        </div>
+
+        <div style="font-size:16px;text-align: center;margin-top:15px;">实际获得：&yen;<span id="withdrawAmount">0.00</span>
+            <input type="hidden" name="withdraw" id="withdraw" value="0" />
         </div>
 
         <div class="form-btn">
@@ -66,11 +82,62 @@
 {include file="index@Index/floor"}
 <script src="{$src}js/ajax.js"></script>
 <script>
+    function js(obj){
+        //console.log(obj.value) ;
+        var poundage = $("#poundage").text().replace(/[^0-9]/ig, "") / 100 ;
+        var poundageAmount = Number(obj.value * poundage).toFixed(2) ;
+        $("#poundageAmount").html(poundageAmount) ;
+        $("#div").prop('value',poundageAmount) ;
+
+        // 实际获得
+        var withdraw = Number( obj.value - poundageAmount ).toFixed(2) ;
+        $("#withdraw").prop('value',withdraw) ;
+        $("#withdrawAmount").html(withdraw) ;
+        //console.log( poundage ) ;
+    }
+
     $('.icon-fanhui').on('click', function () {
         location.href = '/';
     });
 
     $('#forms').off('submit').on('submit', function () {
+
+        // 余额
+        var balance = $("#balance").val() ;
+        // 手续费
+        var poundage = $("#div").val() ;
+        // 最小提现
+        var base = $("#base").val() ;
+        // 倍数
+        var times = $("#times").val() ;
+        // 提现金额
+        var amount = !$("#number").val() ? 0 :$("#number").val()  ;
+
+        // 提现后
+        var after = Number( balance - amount ).toFixed(2) ;
+        $("#after").prop( 'value' , after  ) ;
+
+        if( !$("#pay").val() || $("#pay").val().length < 6 ){
+            $.alert('请输入支付密码') ;
+            return false ;
+        }
+
+        if( balance < poundage ){
+            $.alert('余额小于提现金额') ;
+            return false ;
+        }
+
+        if( amount < base ){
+            $.alert('提现数额不得低于'+base + '元') ;
+            return false ;
+        }
+
+        if( amount % times > 0 ){
+            $.alert('提现倍数为'+times ) ;
+            return false ;
+        }
+
+
         $.confirm("确定要执行此操作吗？", function () {
             //点击确认后的回调函数
             Ajax($('#forms'));
