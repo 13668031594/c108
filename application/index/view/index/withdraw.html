@@ -1,0 +1,84 @@
+{include file="index@Index/header"}
+<body style="background: #f4f4f4;">
+<!-- 顶部 -->
+<div id="header">
+    <div class="header-left">
+        <span class="iconfont icon-fanhui"></span>
+    </div>
+    <div class="header-content">提现</div>
+    <div class="header-right">
+    </div>
+</div>
+
+<!-- 内容 -->
+<div class="content">
+    <form id="forms" action="/index/withdraw" method="post">
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">当前余额</label></div>
+                <div class="weui-cell__bd">
+                    {$member['remind']}
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">最低提现数</label></div>
+                <div class="weui-cell__bd">
+                    {$set['withdrawBase']}
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">提现倍数</label></div>
+                <div class="weui-cell__bd">
+                    {$set['withdrawTimes']}
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">手续费</label></div>
+                <div class="weui-cell__bd">
+                    {$set['withdrawPoundage']}%
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">转出数额</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" name="number" value="" placeholder="请输入转出数额">
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">支付密码</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="password" name="pay" value="" placeholder="请输入交易密码">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-btn">
+            <button class="weui-btn weui-btn_primary" type="submit">确认</button>
+        </div>
+    </form>
+</div>
+
+{include file="index@Index/floor"}
+<script src="{$src}js/ajax.js"></script>
+<script>
+    $('.icon-fanhui').on('click', function () {
+        location.href = '/';
+    });
+
+    $('#forms').off('submit').on('submit', function () {
+        $.confirm("确定要执行此操作吗？", function () {
+            //点击确认后的回调函数
+            Ajax($('#forms'));
+        }, function () {
+            //点击取消后的回调函数
+        });
+        return false;
+    });
+</script>
+
+</html>

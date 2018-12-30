@@ -93,7 +93,7 @@ class IndexController extends \app\http\controller\IndexController
     {
         $result = $this->class->header2('财务');
 
-        $result['record'] =  $this->class->record();
+        $result['record'] = $this->class->record();
         $result['type'] = input('type');
 
         return parent::view('financial', $result);
@@ -122,7 +122,7 @@ class IndexController extends \app\http\controller\IndexController
     {
         $out_man = $this->class->out_man($id);
 
-        return parent::view('roll-out', ['out_man' => $out_man,'member' => $this->class->member]);
+        return parent::view('roll-out', ['out_man' => $out_man, 'member' => $this->class->member]);
     }
 
     //转换
@@ -138,7 +138,7 @@ class IndexController extends \app\http\controller\IndexController
     {
         $result = $this->class->header2('祭拜');
 
-        return parent::view('worship',$result);
+        return parent::view('worship', $result);
     }
 
     //增值服务
@@ -146,6 +146,11 @@ class IndexController extends \app\http\controller\IndexController
     {
         $result = $this->class->header2('增值服务');
 
-        return parent::view('added',$result);
+        return parent::view('added', $result);
+    }
+
+    public function withdraw()
+    {
+        return parent::view('withdraw');
     }
 }

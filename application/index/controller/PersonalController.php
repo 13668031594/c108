@@ -23,6 +23,8 @@ class PersonalController extends \app\http\controller\IndexController
 
         $this->class = new IndexClass();
 
+        $this->class->is_login();
+
         session('floor', 'self');
     }
 
@@ -44,7 +46,9 @@ class PersonalController extends \app\http\controller\IndexController
     //个人资料
     public function self()
     {
-        return parent::view('data', ['member' => $this->class->member]);
+        $bank = $this->class->bank();
+
+        return parent::view('data', ['member' => $this->class->member,'bank' => $bank]);
     }
 
     //修改昵称
@@ -89,7 +93,7 @@ class PersonalController extends \app\http\controller\IndexController
 
         return parent::view('shared', ['url' => $url]);
     }
-
+/*
     //激活资产页面
     public function act()
     {
@@ -155,7 +159,7 @@ class PersonalController extends \app\http\controller\IndexController
         $result = $this->class->pay_note();
 
         return parent::tables($result);
-    }
+    }*/
 
     //团队页面
     public function team()

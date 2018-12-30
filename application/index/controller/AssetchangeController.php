@@ -14,8 +14,13 @@ class AssetchangeController extends \app\http\controller\IndexController
         parent::__construct();
 
         $this->class = new \classes\index\AssetChangeClass();
+
+        $this->class->is_login();
+
+        $this->class->status();
     }
 
+    //转出
     public function asset_out()
     {
         $this->class->validator_out();
@@ -25,6 +30,7 @@ class AssetchangeController extends \app\http\controller\IndexController
         return parent::success('/');
     }
 
+    //报单
     public function exchange(Request $request)
     {
         Db::startTrans();
@@ -34,5 +40,10 @@ class AssetchangeController extends \app\http\controller\IndexController
         Db::commit();
 
         return parent::success('/');
+    }
+
+    public function withdraw()
+    {
+
     }
 }

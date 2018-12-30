@@ -15,7 +15,7 @@ class Member extends Migrator
         $table->addColumn(Column::string('account')->setComment('账号'));
         $table->addColumn(Column::string('nickname')->setComment('昵称'));
         $table->addColumn(Column::string('password')->setComment('密码'));
-        $table->addColumn(Column::string('pay_pass')->setComment('交易密码'));
+        $table->addColumn(Column::string('pay_pass')->setComment('支付密码'));
         $table->addColumn(Column::char('created_type', 1)->setDefault(0)->setComment('创建方式，0前台，1后台'));
         $table->addColumn(Column::char('status', 1)->setDefault(0)->setComment('状态，0正常，1冻结，2禁用'));
         $table->addColumn(Column::char('grade',1)->setDefault(0)->setComment('会员等级'));

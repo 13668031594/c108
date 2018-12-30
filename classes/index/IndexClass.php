@@ -9,6 +9,7 @@
 namespace classes\index;
 
 use app\adv\model\AdvModel;
+use app\bank\model\BankModel;
 use app\goods\model\GoodsModel;
 use app\member\model\MemberModel;
 use app\notice\model\NoticeModel;
@@ -136,18 +137,38 @@ class IndexClass extends \classes\IndexClass
     public function nickname()
     {
         $rule = [
-            'nickname' => 'require|min:1|max:48'
+            'nickname|昵称' => 'require|min:1|max:48',
+            'bank_id|银行' => 'length:0,255',
+            'bank_man|收款人' => 'length:0,255',
+            'bank_no|卡号' => 'length:0,255',
         ];
 
-        $file = [
+        /*$file = [
             'nickname' => '昵称',
-        ];
+            ''
+        ];*/
 
-        $result = parent::validator(input(), $rule, [], $file);
+        $result = parent::validator(input(), $rule, [], []);
         if (!is_null($result)) parent::ajax_exception(000, $result);
 
+
         $member['id'] = $this->member['id'];
+        $member['bank_id'] = null;
+        $member['bank_name'] = null;
+        $member['bank_no'] = input('bank_no');
+        $member['bank_man'] = input('bank_man');
         $member['nickname'] = input('nickname');
+        if (!empty(input('bank_id'))){
+
+            $bank = new BankModel();
+            $bank = $bank->where('id','=',input('bank_id'))->find();
+            if (!is_null($bank)){
+
+                $member['bank_id'] = $bank->id;
+                $member['bank_name'] = $bank->name;
+            }
+        }
+//        parent::ajax_exception(000, 'a'.$member['bank_id']);
         $model = new \app\member\model\MemberModel();
         $model->saveAll([$member]);
 
@@ -309,6 +330,15 @@ class IndexClass extends \classes\IndexClass
 
         $result['members'] = $member;
         $result['member_grades'] = $grades;
+
+        return $result;
+    }
+
+    public function bank()
+    {
+        $model = new BankModel();
+
+        $result = $model->order('sort','asc')->column('*');
 
         return $result;
     }

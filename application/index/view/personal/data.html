@@ -28,6 +28,34 @@
                     <input class="weui-input" type="text" name="nickname" value="{$member['nickname']}" placeholder="请输入昵称">
                 </div>
             </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">收款银行</label></div>
+                <div class="weui-cell__bd">
+                        <select name="bank_id" lay-verify="">
+                            <option value="">请选择收款银行</option>
+                            {foreach $bank as $k => $v}
+                            <option value="{$v['id']}" {if($member[
+                            'bank_id'] == $v['id'])}selected{/if}>{$v['name']}</option>
+                            {/foreach}
+                        </select>
+                    <!--<input class="weui-input" type="text" name="nickname" value="{$member['nickname']}" placeholder="请输入昵称">-->
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">卡号</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="bank_no" value="{$member['bank_no']}" placeholder="请输入卡号">
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">收款人</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="bank_man" value="{$member['bank_man']}" placeholder="请输入银行卡号">
+                </div>
+            </div>
         </div>
 
         <div class="form-btn">

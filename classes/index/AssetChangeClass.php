@@ -502,7 +502,7 @@ class AssetChangeClass extends \classes\IndexClass
 
         //判断直推晋升条件是否满足
         $all_3 = new MemberModel();
-        $all_3 = $all_3->where('referee_id', '=', $referee->id)->where('grade', '=', 3)->count();
+        $all_3 = $all_3->where('referee_id', '=', $referee->id)->where('grade', '=', [3, 4, 5])->count();
         if ($all_3 < $set['levelDirectorAgent']) return $referee;//不满足直推
 
         //计算团队业绩
@@ -536,14 +536,14 @@ class AssetChangeClass extends \classes\IndexClass
         $record->save();
 
         //继续判断上级
-        if (empty($referee->referee_id))return $referee;
+        if (empty($referee->referee_id)) return $referee;
         $referee_2 = new MemberModel();
-        $referee_2 = $referee_2->where('id','=',$referee->referee_id)->where('grade','=',4)->find();
-        if (is_null($referee_2))return $referee;
+        $referee_2 = $referee_2->where('id', '=', $referee->referee_id)->whereIn('grade', '=', 4)->find();
+        if (is_null($referee_2)) return $referee;
 
         //判断直推晋升条件是否满足
         $all_3 = new MemberModel();
-        $all_3 = $all_3->where('referee_id', '=', $referee_2->id)->where('grade', '=', 4)->count();
+        $all_3 = $all_3->where('referee_id', '=', $referee_2->id)->where('grade', '=', [4, 5])->count();
         if ($all_3 < $set['levelChairmanDirector']) return $referee;//不满足直推
 
         //计算团队业绩
@@ -590,5 +590,62 @@ class AssetChangeClass extends \classes\IndexClass
         if ($test) return self::new_order();
 
         return $order;
+    }
+
+    //提现验证
+    public function validator_withdraw(Request $request)
+    {
+        //验证条件
+        $rule = [
+            'number|提现金额' => 'require|integer|between:1,100000000',
+            'base|提现基数' => 'require',
+            'times|提现倍数' => 'require',
+            'poundage|手续费比例' => 'require',
+            'after|提现后' => 'require',
+            'before|提现前' => 'require',
+            'div|手续费' => 'require',
+            'withdraw|实际获得' => 'require',
+            'pay|支付密码' => 'require',
+        ];
+
+        //验证
+        $result = parent::validator($request->post(), $rule);
+        //有错误报告则报错
+        if (!is_null($result)) parent::ajax_exception(000, $result);
+
+        //获取会员资料
+        $member = parent::member();
+
+        //必须完善收款信息
+        if (empty($member['bank_no']) || empty($member['bank_man']) || empty($member['bank_name'])) parent::ajax_exception(000, '请先完善收款信息');
+
+        //所有参数
+        $data = $request->post();
+
+        //验证交易密码
+        if (md5($data['pay']) != $member['pay_pass']) parent::ajax_exception(000, '支付密码输入错误');
+
+        //验证交易前金额
+        if ($data['before'] != $member['remind']) parent::ajax_exception(000, '请刷新重试（before）');
+
+        //获取配置文件
+        $sys = new SystemClass();
+        $sys = $sys->index();
+
+        //验证提现配置3件套
+        if ($sys['withdrawBase'] != $data['base']) parent::ajax_exception(000, '请刷新重试（base）');
+        if ($sys['withdrawTimes'] != $data['times']) parent::ajax_exception(000, '请刷新重试（times）');
+        if ($sys['withdrawPoundage'] != $data['poundage']) parent::ajax_exception(000, '请刷新重试（poundage）');
+
+        //提现金额
+        $number = number_format($data['number'], 2, '.', '');
+        if ($number != $data['number']) parent::ajax_exception(000, '提现金额至多精确到2位小数');
+
+            //验证手续费
+            $div = number_format(($number * $data['poundage'] / 100), 2, '.', '');
+        if ($div != $data['div']) parent::ajax_exception(000, '请刷新重试（div）');
+
+        //验证提现后余额
+//        $after = ($member['remind'] >= ($div + $number))
     }
 }
