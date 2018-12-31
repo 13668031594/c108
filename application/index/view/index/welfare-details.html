@@ -13,10 +13,14 @@
 
 <!-- 内容 -->
 <div class="content">
-    <div class="goods-images">
-        {foreach $images as $v}
-        <img src="{$v['location']}" />
-        {/foreach}
+    <div class="swiper-container" style="height: 14rem; width: 100%;">
+        <div class="swiper-wrapper">
+            {foreach $images as $v}
+            <div class="swiper-slide" data-swiper-autoplay="2000"><img src="{$v['location']}" >
+            </div>
+            {/foreach}
+        </div>
+        <div class="swiper-pagination"></div>
     </div>
     <div class="weui-form-preview">
         <div class="weui-form-preview__hd">
@@ -57,9 +61,22 @@
 </div>
 {include file="index@Index/floor"}
 <script src="{$src}js/ajax.js"></script>
+<script src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/swiper.min.js"></script>
 <script>
     $('.icon-fanhui').on('click', function(){
         location.href = '/';
+    });
+
+    var mySwiper = new Swiper('.swiper-container', {
+        speed: 500,//播放速度
+        autoplayDisableOnInteraction: false,
+        autoplay: 2000,
+        autoHeight: true,
+        loop: true,//是否循环播放
+        //setWrapperSize: true,
+        pagination: '.swiper-pagination',//分页
+        effect: 'slide',//动画效果
+        centeredSlides: true,
     });
 
     $('#forms').off('submit').on('submit', function(){
