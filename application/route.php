@@ -31,6 +31,7 @@ Route::controller('admin/order','order/Order');//升级订单
 Route::controller('admin/notice','notice/Notice');//公告列表
 Route::controller('admin/adv','adv/Adv');//广告列表
 Route::controller('admin/goods','goods/Goods');//商品列表
+Route::controller('admin/bill','bill/Bill');//统计
 /**
  * 后台路由组结束
  */

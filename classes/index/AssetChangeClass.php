@@ -237,6 +237,7 @@ class AssetChangeClass extends \classes\IndexClass
         $order_model->before_value = $grades[$member['grade']];
         $order_model->after_key = $after;
         $order_model->after_value = $grades[$after];
+        $order_model->level_code = $level;
         $order_model->level_name = $order[$level];
         $order_model->member_id = $member['id'];
         $order_model->member_account = $member['account'];
@@ -339,8 +340,8 @@ class AssetChangeClass extends \classes\IndexClass
         $record->member_id = $referee->id;
         $record->account = $referee->account;
         $record->nickname = $referee->nickname;
-        $record->total = $remind;
-        $record->remind = $remind;
+        $record->total = $total;
+        $record->remind = $total;
         $record->content = '直推下级报单，会员等级升为『' . $level_name . '』获得销售奖『' . $total . '』';
         $record->integral_now = $referee->integral;
         $record->integral_all = $referee->integral_all;
@@ -410,8 +411,8 @@ class AssetChangeClass extends \classes\IndexClass
         $record->member_id = $referee->id;
         $record->account = $referee->account;
         $record->nickname = $referee->nickname;
-        $record->total = $remind;
-        $record->remind = $remind;
+        $record->total = $total;
+        $record->remind = $total;
         $record->content = '间推下级报单，会员等级升为『' . $level_name . '』获得销售奖『' . $total . '』';
         $record->integral_now = $referee->integral;
         $record->integral_all = $referee->integral_all;
@@ -456,8 +457,8 @@ class AssetChangeClass extends \classes\IndexClass
         $record->member_id = $referee->id;
         $record->account = $referee->account;
         $record->nickname = $referee->nickname;
-        $record->total = $remind;
-        $record->remind = $remind;
+        $record->total = $total;
+        $record->remind = $total;
         $record->content = '下级报单，会员等级升为『' . $level_name . '』获得津贴奖『' . $total . '』';
         $record->integral_now = $referee->integral;
         $record->integral_all = $referee->integral_all;
@@ -502,8 +503,8 @@ class AssetChangeClass extends \classes\IndexClass
         $record->member_id = $referee->id;
         $record->account = $referee->account;
         $record->nickname = $referee->nickname;
-        $record->total = $remind;
-        $record->remind = $remind;
+        $record->total = $total;
+        $record->remind = $total;
         $record->content = '下级报单，会员等级升为『' . $level_name . '』获得育成奖『' . $total . '』';
         $record->integral_now = $referee->integral;
         $record->integral_all = $referee->integral_all;

@@ -16,6 +16,7 @@ class MemberRecordModel extends Model
         '81' => '销售奖',
         '82' => '津贴奖',
         '83' => '育成奖',
+        '84' => '董事分红',
         '90' => '晋升'
     ];
 }
