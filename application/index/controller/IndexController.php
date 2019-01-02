@@ -112,7 +112,7 @@ class IndexController extends \app\http\controller\IndexController
     {
         $route = '/index/roll-out/' . $this->class->member['id'];
 
-        $url = $this->class->make_qr('asset_in', $route);
+        $url = $this->class->make_qr_in('asset_in', $route);
 
         return parent::view('shift-to-qr', ['url' => $url]);
     }
