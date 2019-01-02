@@ -27,7 +27,7 @@ class StorageClass
 
         $file = fopen($this->url, 'r');//打开文件
 
-        $result = fread($file, filesize($this->url));;//读取文件
+        $result = fread($file, filesize($this->url));//读取文件
 
         fclose($file);//关闭文件
 

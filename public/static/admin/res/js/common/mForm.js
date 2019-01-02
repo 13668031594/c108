@@ -9,7 +9,7 @@ layui.define(['form', 'layedit'], function (exports) {
 
     layedit.set({
         uploadImage: {
-             url: '' //接口url
+             url: '/admin/system/image' //接口url
             ,type: '' //默认post
         }
     });

@@ -84,6 +84,7 @@ Route::post('index/welfare','index/Assetchange/welfare');//申请领奖
 
 //个人中心
 Route::get('index/personal', 'index/Personal/personal');
+Route::get('index/center', 'index/Personal/center');
 Route::get('index/self', 'index/Personal/self');
 Route::post('index/self', 'index/Personal/nickname');
 Route::get('index/password', 'index/Personal/pass');

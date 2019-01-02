@@ -43,8 +43,42 @@ class SystemController extends AdminController
 
     public function postImage(Request $request)
     {
-        $image = $this->class->image($request);
+        $src = $this->class->image($request);
 
-        return parent::success('','操作成功',$image);
+        if (!is_array($src)) {
+
+            $result = [
+                'code' => '1',
+                'msg' => $src,
+                'data' => [
+                    'src' => '',
+                    'total' => ''
+                ]
+            ];
+        } else {
+
+            $result = [
+                'code' => '0',
+                'msg' => '',
+                'data' => $src
+            ];
+        }
+
+
+        return json_encode($result);
+    }
+
+    public function getFirst()
+    {
+        $text = $this->class->first();
+
+        return parent::view('first', ['text' => $text]);
+    }
+
+    public function postFirst(Request $request)
+    {
+        $this->class->save_first($request);
+
+        return parent::success('/system/first');
     }
 }

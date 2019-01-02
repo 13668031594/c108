@@ -85,6 +85,14 @@ class IndexClass extends \classes\IndexClass
         return $array;
     }
 
+    //首页编辑器
+    public function text()
+    {
+        $class = new SystemClass();
+
+        return $class->first();
+    }
+
     //公告
     public function notice()
     {

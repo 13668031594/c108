@@ -16,7 +16,6 @@ class IndexController extends \app\http\controller\IndexController
 
         $this->class->is_login();
 
-        session('floor', 'index');
     }
 
     public function header()
@@ -39,9 +38,9 @@ class IndexController extends \app\http\controller\IndexController
     {
         $result = $this->class->header2('首页');
 
-        $result['first_login'] = session('first_login');
+        $result['text'] = $this->class->text();
 
-        session('first_login', null);
+        session('floor', 'index');
 
         return parent::view('index', $result);
     }

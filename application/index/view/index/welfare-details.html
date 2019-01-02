@@ -36,12 +36,16 @@
                 <label class="weui-form-preview__label">奖品</label>
                 <span class="weui-form-preview__value">{$self['reward']}</span>
             </div>
-            <div class="weui-form-preview__item">
+            <!--<div class="weui-form-preview__item">
                 <label class="weui-form-preview__label">详情</label>
                 <span class="weui-form-preview__value">{php}echo $content;{/php}</span>
-            </div>
+            </div>-->
+        </div>
+        <div class="fwb-content">
+            {php}echo $content;{/php}
         </div>
     </div>
+
     <form id="forms" action="/index/welfare" method="post">
         <input type="hidden" name="id" value="{$self['id']}">
         <input type="hidden" name="total" value="{$self['total']}">

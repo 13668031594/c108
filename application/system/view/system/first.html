@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>前台首页</title>
+    <link rel="stylesheet" href="{$src}layui/css/layui.css">
+    <link rel="stylesheet" href="{$src}res/css/common.css"/>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="http://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+            crossorigin="anonymous"></script>
+    <style type="text/css">
+    </style>
+</head>
+
+<div class="layui-fluid">
+
+    <div class="layui-row m-breadcrumb">
+        <span class="layui-breadcrumb" lay-separator="/">
+          <a href="javascript:;">首页</a>
+            <a href="javascript:;">产品管理</a>
+          <a href="javascript:;">前台首页</a>
+          <!--<a><cite>{if isset($self)}编辑{else/}添加{/if}</cite></a>-->
+        </span>
+    </div>
+
+    <form class="layui-form" action="/admin/system/first" method="post">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">产品详情</label>
+            <div class="layui-input-block">
+                <textarea id="fwb-content" name="fwb-content" placeholder="描述"
+                          autocomplete="off"
+                          class="layui-textarea" maxlength="60">{$text}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" id='submit' lay-submit lay-filter="*">立即保存</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+<script src="{$src}layui/layui.js"></script>
+<script>
+    var urls = {
+        upload: '/admin/goods/image',
+        delete: '/'
+    }
+
+    // 上传序号
+    var imageIndex = 0;
+    // 相册最大数量
+    var maxAlbum = 4;
+
+    layui.config({
+        base: '{$src}res/js/common/'
+    }).use(['mForm', 'layer', 'element', 'upload', 'form'], function () {
+        var upload = layui.upload;
+        var form = layui.form;
+
+        var uploadPms = {
+            elem: '#upload'
+            , url: urls.upload
+            //, multiple: true
+            , field: 'images'
+            , exts: 'jpg|png|gif|bmp|jpeg'
+            , size: 500//kb
+            , number: 1
+            , data: { // 动态参数
+                index: function () {
+                    return imageIndex;
+                }
+            }
+            , done: function (res, index, upload) {
+                //console.log(index);
+                console.log(res);
+                /**
+                 * 返回格式
+                 * {
+                 *      status : ,
+                 *      message : ,
+                 *      image : , 成功以后图片预览地址
+                 *      imageId : 成功以后图片id
+                 *      index : 0 图片序号，我会传一个index给你，你原路返回给我
+                 * }
+                 */
+
+                // image
+                // imageId  图片id
+
+                if (res.status == 'success') {
+                    layer.msg('上传成功');
+                    $(".images-preview").eq(res.index).prop('src', res.image);
+                    $("input[name='imageId[]']").eq(res.index).prop('value', res.imageId);
+
+                } else {
+                    layer.msg('上传失败');
+                }
+            }
+        };
+
+        upload.render(uploadPms);
+
+        form.on('switch(show)', function (data) {
+            if (data.elem.checked) {
+                $('#show').prop('value', 'on');
+            } else {
+                $('#show').prop('value', 'off');
+            }
+        });
+
+        // 新增一个图片
+        $("#addGoodsImage").on('click', function () {
+            if ($("#extendImages .layui-inline").length == maxAlbum) {
+                layer.msg('最多只能增加' + maxAlbum + '张图片');
+                return false;
+            }
+            $("#extendImages").append($("#defaultImage").clone().prop('id', ''));
+            $("#extendImages .layui-inline:last").find('span').html("预览");
+            $("#extendImages .layui-inline:last").find('button').data("id", $("#extendImages .layui-inline").length);
+            $("#extendImages .layui-inline:last").find('img').prop('src', '');
+            $("#extendImages .layui-inline:last").find('input').prop('value', '');
+            $("#extendImages .layui-inline:last").find('.uploadDelete').show();
+        });
+
+
+    });
+
+
+    // 触发上传
+    function clickUpload(obj) {
+        imageIndex = $(obj).data('id');
+        $("#upload").click();
+    }
+
+
+    // 移除相册图片
+    function removeImage(obj) {
+
+        $(obj).parents('.layui-inline').remove();
+        // 刷新
+        $("#extendImages .layui-inline").each(function (i) {
+            $(this).find('button').data('id', i + 1);
+        });
+    }
+
+
+</script>
+</body>
+
+</html>

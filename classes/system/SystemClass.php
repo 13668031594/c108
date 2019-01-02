@@ -189,7 +189,7 @@ class SystemClass extends AdminClass
     public function image(Request $request)
     {
         // 获取表单上传文件 例如上传了001.jpg
-        $file = $request->file('images');
+        $file = $request->file('file');
 
         $location = 'logo_' . time();
 
@@ -197,12 +197,12 @@ class SystemClass extends AdminClass
         $info = $file->validate(['size' => (1024 * 1024), 'ext' => 'jpg,png,gif,jpeg,bmp'])->move($this->dir, $location);
 
         // 上传失败获取错误信息
-        if (!$info) parent::ajax_exception(000, $file->getError());
+        if (!$info) $file->getError();
 
         $location = '/' . $this->dir . '/' . $info->getSaveName();
 
         return [
-            'image' => $location,
+            'src' => $location,
         ];
     }
 
@@ -294,15 +294,48 @@ class SystemClass extends AdminClass
 
     public function goods_update($result)
     {
-        foreach ($this->level as $k => $v){
+        foreach ($this->level as $k => $v) {
 
-            if (!isset($result[$k]))continue;
+            if (!isset($result[$k])) continue;
 
             $model = new GoodsModel();
             $model = $model->where(['code' => $k])->find();
-            if (is_null($model))continue;
+            if (is_null($model)) continue;
             $model->amount = $result[$k];
             $model->save();
         }
+    }
+
+    public function first()
+    {
+        $sys = new StorageClass('first.txt');
+
+        $set = $sys->get();;
+
+        if (!is_array($set)) {
+
+            $result = $set;
+        } else {
+
+            $result = '还没有编辑任何内容';
+        }
+
+        return $result;
+    }
+
+    //保存配置文件
+    public function save_first(Request $request)
+    {
+        //获取提交的参数
+        $set = $request->post('fwb-content');
+
+        if (empty($set)) parent::ajax_exception(000, '请写点什么');
+
+        $sys = new StorageClass('first.txt');
+
+        //保存到文件
+        $sys->save($set);
+
+        return $set;
     }
 }

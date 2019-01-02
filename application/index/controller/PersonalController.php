@@ -43,6 +43,21 @@ class PersonalController extends \app\http\controller\IndexController
         return parent::view('personal', $result);
     }
 
+    //个人中心
+    public function center()
+    {
+        $grades = new MemberModel();
+
+        $grades = $grades->grades;
+
+        $result = [
+            'member' => $this->class->member,
+            'grades' => $grades
+        ];
+
+        return parent::view('center', $result);
+    }
+
     //个人资料
     public function self()
     {

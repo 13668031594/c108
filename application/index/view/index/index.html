@@ -22,25 +22,7 @@
             &lt;!&ndash;<li><a href="/index/shared"><span class="iconfont icon-gongxiang" style="font-size: 2.5rem;"></span>家族共享</a></li>&ndash;&gt;
             &lt;!&ndash;<li><a href="/index/added"><span class="iconfont icon-zengzhifuwu" style="font-size: 2.2rem;"></span>增值服务</a></li>&ndash;&gt;
         </ul>-->
-<div style="padding:10px 0px;">这里是内容</div>
-{if !empty($first_login)}
-        <!-- 红包 -->
-        <div class="draw-gift">
-            <div class="draw-img">
-                <div class="draw-up hide"></div>
-                <div class="draw-up-up" id="draw-up-up"></div>
-                <div class="draw-mid draw-mid-move"></div>
-                <div class="draw-down"></div>
-                <div class="draw-down2"></div>
-                <div class="draw-list">
-                    <p class="draw-list-title">获得xxx</p>
-                </div>
-                <span class="draw-close">✕</span>
-            </div>
-            <!--<a href="javascript:;" id="draw-btn">点击打开</a>-->
-        </div>
-</div>
-{/if}
+<div style="padding:10px 0px;" class="fwb-content">{php}echo $text;{/php}</div>
 {include file="index@Index/floor"}
 
 <script>

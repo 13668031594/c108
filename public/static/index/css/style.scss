@@ -924,3 +924,13 @@
         font-size:1.8rem;
     }
 }
+
+.fwb-content{
+
+    img{
+        max-width:100%;
+        height:auto;
+        -webkit-background-size: 100%;
+        background-size: 100%;
+    }
+}
