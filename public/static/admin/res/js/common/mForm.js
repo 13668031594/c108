@@ -7,6 +7,13 @@ layui.define(['form', 'layedit'], function (exports) {
     var form = layui.form;
     var layedit = layui.layedit;
 
+    layedit.set({
+        uploadImage: {
+             url: '' //接口url
+            ,type: '' //默认post
+        }
+    });
+
     // 集成下富文本
     var fwbcontent = layedit.build('fwb-content', {
         height: 380

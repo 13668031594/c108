@@ -42,6 +42,20 @@ input[type='checkbox'], input[type='radio'] {
 @media only screen and (min-width: 400px) {
   html, body {
     font-size: 12px !important; } }
+@media (min-width: 750px) {
+  #header {
+    width: 750px !important;
+    left: 50% !important;
+    margin-left: -375px; }
+
+  .content {
+    width: 750px;
+    margin: 0px auto; }
+
+  .weui-tabbar {
+    width: 750px !important;
+    left: 50% !important;
+    margin-left: -375px; } }
 /******************* weui样式替换 *****************/
 .primary {
   color: #fd9109 !important; }
@@ -588,11 +602,9 @@ input[type='checkbox'], input[type='radio'] {
   padding: 2rem 1rem; }
 
 .share-qr {
-  width: 70%;
-  padding-top: 70%;
-  margin: 6rem auto 0 auto;
+  /*margin: 6rem auto 0 auto;
   height: 0;
-  position: relative; }
+  position: relative;*/ }
   .share-qr > div {
     position: absolute;
     left: 0;
@@ -600,9 +612,9 @@ input[type='checkbox'], input[type='radio'] {
     bottom: 0;
     right: 0;
     margin: auto; }
-    .share-qr > div > img {
-      height: 100%;
-      width: 100%; }
+  .share-qr img {
+    background-size: 100%;
+    max-width: 100%; }
 
 .share-qr-bg {
   position: fixed;
@@ -817,5 +829,11 @@ input[type='checkbox'], input[type='radio'] {
     height: auto;
     -webkit-background-size: 100%;
     background-size: 100%; }
+
+.weui-grid__icon {
+  text-align: center; }
+  .weui-grid__icon span {
+    color: #534870;
+    font-size: 1.8rem; }
 
 /*# sourceMappingURL=style.css.map */

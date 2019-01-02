@@ -26,7 +26,25 @@
     }
 }
 
+@media (min-width: 750px){
 
+    #header{
+        width:750px !important;
+        left:50%!important;
+        margin-left:-375px;
+        //margin:0px auto;
+    }
+    .content{
+        width:750px;
+        margin:0px auto;
+    }
+
+    .weui-tabbar{
+        width:750px!important;
+        left:50%!important;
+        margin-left:-375px;
+    }
+}
 /******************* weui样式替换 *****************/
 
 //弹窗按钮颜色
@@ -632,11 +650,11 @@
 
 //分享
 .share-qr{
-    width: 70%;
-    padding-top: 70%;
-    margin: 6rem auto 0 auto;
+    //width: 70%;
+    //padding-top: 70%;
+    /*margin: 6rem auto 0 auto;
     height: 0;
-    position: relative;
+    position: relative;*/
 
     >div{
         position: absolute;
@@ -646,10 +664,14 @@
         right: 0;
         margin: auto;
 
-        >img{
-            height: 100%;
-            width: 100%;
-        }
+
+    }
+    img{
+        //height: 100%;
+        //width: 100%;
+        background-size:100%;
+        max-width:100%;
+        //height:30rem;
     }
 }
 
@@ -892,5 +914,13 @@
         height:auto;
         -webkit-background-size: 100%;
         background-size: 100%;
+    }
+}
+
+.weui-grid__icon{
+    text-align: center;
+    span{
+        color:#534870;
+        font-size:1.8rem;
     }
 }
