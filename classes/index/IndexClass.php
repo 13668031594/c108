@@ -130,16 +130,16 @@ class IndexClass extends \classes\IndexClass
         $object = new \QrCode();
         $url = 'http://' . config('young.url') . $url;//网址或者是文本内容
         $level = 3;
-        $size = '6';
+        $size = 8;
         $ad = $dir . '/' . $this->member['id'] . '.jpg';
         $errorCorrectionLevel = intval($level);//容错级别
         $matrixPointSize = intval($size);//生成图片大小
         $object->png($url, $ad, $errorCorrectionLevel, $matrixPointSize, 2);
 
         $a = $dir . '/' . $this->member['id'] . 'a.jpg';
-            Image::open('04.jpg')
-            ->text($this->member['id'], 'FangzhengZhengkai.TTF', 22,'#000000',[230,92])
-            ->water($ad,[155,290])
+            Image::open('06.jpg')
+//            ->text($this->member['id'], 'FangzhengZhengkai.TTF', 22,'#000000',[230,92])
+            ->water($ad,[115,380])
             ->save($a);
 
         return '/' . $a;
@@ -162,9 +162,9 @@ class IndexClass extends \classes\IndexClass
         $object->png($url, $ad, $errorCorrectionLevel, $matrixPointSize, 2);
 
         $a = $dir . '/' . $this->member['id'] . 'a.jpg';
-            Image::open('05.jpg')
+            Image::open('07.jpg')
 //            ->text($this->member['id'], 'FangzhengZhengkai.TTF', 22,'#000000',[20,20])
-            ->water($ad,[190,450])
+            ->water($ad,[190,360])
             ->save($a);
 
         return '/' . $a;
