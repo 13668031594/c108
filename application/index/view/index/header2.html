@@ -21,10 +21,11 @@
     </div>
 
     <!-- 广告 -->
-    <div class="swiper-container" style="height: 14rem; width: 100%;">
+    <div class="swiper-container" style="width: 100%;">
         <div class="swiper-wrapper">
             {foreach $adv as $v}
-            <div class="swiper-slide" data-swiper-autoplay="2000"><img src="{$v['location']}" alt="{$v['describe']}">
+            <div class="swiper-slide" data-swiper-autoplay="2000">
+                <img src="{$v['location']}" alt="{$v['describe']}">
             </div>
             {/foreach}
         </div>
