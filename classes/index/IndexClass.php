@@ -124,6 +124,10 @@ class IndexClass extends \classes\IndexClass
     public function make_qr($dir, $url)
     {
         if (!is_dir($dir)) mkdir($dir);
+
+        $a = $dir . '/' . $this->member['id'] . 'a.jpg';
+        if (file_exists($a)) return '/' . $a;
+
         //不带LOGO
         vendor('phpqrcode.phpqrcode');
         //生成二维码图片
@@ -136,10 +140,9 @@ class IndexClass extends \classes\IndexClass
         $matrixPointSize = intval($size);//生成图片大小
         $object->png($url, $ad, $errorCorrectionLevel, $matrixPointSize, 2);
 
-        $a = $dir . '/' . $this->member['id'] . 'a.jpg';
-            Image::open('06.jpg')
+        Image::open('06.jpg')
 //            ->text($this->member['id'], 'FangzhengZhengkai.TTF', 22,'#000000',[230,92])
-            ->water($ad,[115,380])
+            ->water($ad, [115, 380])
             ->save($a);
 
         return '/' . $a;
@@ -149,6 +152,10 @@ class IndexClass extends \classes\IndexClass
     public function make_qr_in($dir, $url)
     {
         if (!is_dir($dir)) mkdir($dir);
+
+        $a = $dir . '/' . $this->member['id'] . 'a.jpg';
+        if (file_exists($a)) return '/' . $a;
+
         //不带LOGO
         vendor('phpqrcode.phpqrcode');
         //生成二维码图片
@@ -161,10 +168,9 @@ class IndexClass extends \classes\IndexClass
         $matrixPointSize = intval($size);//生成图片大小
         $object->png($url, $ad, $errorCorrectionLevel, $matrixPointSize, 2);
 
-        $a = $dir . '/' . $this->member['id'] . 'a.jpg';
-            Image::open('07.jpg')
+        Image::open('07.jpg')
 //            ->text($this->member['id'], 'FangzhengZhengkai.TTF', 22,'#000000',[20,20])
-            ->water($ad,[190,360])
+            ->water($ad, [190, 360])
             ->save($a);
 
         return '/' . $a;
