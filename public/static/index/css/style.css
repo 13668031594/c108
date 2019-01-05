@@ -585,6 +585,7 @@ input[type='checkbox'], input[type='radio'] {
     font-size: 1.4rem;
     padding: 0.2rem 0; }
   .personal .personal-level {
+    padding: 0.2rem 0;
     font-size: 1.4rem; }
   .personal .personal-integral {
     display: -webkit-box;
