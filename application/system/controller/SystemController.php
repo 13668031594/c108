@@ -36,7 +36,7 @@ class SystemController extends AdminController
 
         $result = $this->class->save();
 
-        $this->class->image_delete($result);//删除未使用的logo
+//        $this->class->image_delete($result);//删除未使用的logo
 
         return parent::success('/system/index');
     }

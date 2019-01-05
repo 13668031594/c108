@@ -130,6 +130,8 @@ class SystemClass extends AdminClass
 
             'payActBase|转账基数' => 'require|number|between:0.01,100000000',
             'payActTimes|转账倍数' => 'require|number|between:0.01,100000000',
+
+            'android|安卓下载地址' => 'require|length:0,255',
         ];
 
         $result = parent::validator(input(), $rule);
@@ -182,6 +184,7 @@ class SystemClass extends AdminClass
             'withdrawPoundage' => '10',
             'payActBase' => '10',
             'payActTimes' => '10',
+            'android' => '',
         ];
     }
 

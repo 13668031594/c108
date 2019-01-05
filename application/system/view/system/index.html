@@ -88,6 +88,15 @@
                         </div>
 
                         <div class="layui-form-item">
+                            <label class="layui-form-label">安卓下载</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="android" title="安卓下载" style="width: 400px"
+                                       placeholder="安卓下载" autocomplete="off" value="{$self['android']}"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
                             <label class="layui-form-label">开关网站</label>
                             <div class="layui-input-block">
                                 <input type="checkbox" id='webSwitch' lay-filter="webSwitch"
@@ -106,6 +115,8 @@
                                       placeholder="请输入关闭原因"
                                       class="layui-textarea">{$self['webCloseReason']}</textarea>
                         </div>
+
+
                     </div>
                 </div>
             </div>
