@@ -28,6 +28,27 @@
                     <input class="weui-input" type="number" name="number" value="" placeholder="请输入转出数额">
                 </div>
             </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">支付密码</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="password" name="pass" value="" placeholder="请输入支付密码">
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">最低转出数</label></div>
+                <div class="weui-cell__bd">
+                    {$set['payActBase']}
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">转出倍数</label></div>
+                <div class="weui-cell__bd">
+                    {$set['payActTimes']}
+                </div>
+            </div>
         </div>
 
         <div class="form-btn">

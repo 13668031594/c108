@@ -49,15 +49,19 @@ class AssetChangeClass extends \classes\IndexClass
 
         $rule = [
             'account' => 'require|min:6|max:20',
-            'number' => 'require|integer|between:1,100000000'
+            'number' => 'require|integer|between:1,100000000',
+            'pass' => 'require|length:1,255',
         ];
         $file = [
             'account' => '转出账号',
-            'number' => '转出金额'
+            'number' => '转出金额',
+            'pass' => '支付密码'
         ];
 
         $result = parent::validator(input(), $rule, [], $file);
         if (!is_null($result)) parent::ajax_exception(000, $result);
+
+        if (md5(input('pass')) != $this->member['pay_pass'])parent::ajax_exception(000, '支付密码错误');
 
         $number = input('number');
 
@@ -257,7 +261,7 @@ class AssetChangeClass extends \classes\IndexClass
         $member->save();
 
         $goods = new GoodsModel();
-        $goods = $goods->where('code' ,'=',$level)->find();
+        $goods = $goods->where('code', '=', $level)->find();
 
         //初始化会员记录
         $record = new MemberRecordModel();
@@ -265,7 +269,7 @@ class AssetChangeClass extends \classes\IndexClass
         $record->account = $member->account;
         $record->nickname = $member->nickname;
         $record->remind = 0 - $remind;
-        $record->content = '报单『' . $goods->name . '('.$order[$level].')』会员等级由『' . $grades[$before] . '』变为『' . $grades[$after] . '』支付余额『' . $remind . '』';
+        $record->content = '报单『' . $goods->name . '(' . $order[$level] . ')』会员等级由『' . $grades[$before] . '』变为『' . $grades[$after] . '』支付余额『' . $remind . '』';
         $record->integral_now = $member->integral;
         $record->integral_all = $member->integral_all;
         $record->remind_now = $member->remind;
@@ -528,7 +532,7 @@ class AssetChangeClass extends \classes\IndexClass
 
         //判断直推晋升条件是否满足
         $all_3 = new MemberModel();
-        $all_3 = $all_3->where('referee_id', '=', $referee->id)->whereIn('grade',  [3, 4, 5])->count();
+        $all_3 = $all_3->where('referee_id', '=', $referee->id)->whereIn('grade', [3, 4, 5])->count();
         if ($all_3 < $set['levelDirectorAgent']) return $referee;//不满足直推
 
         //计算团队业绩
@@ -569,7 +573,7 @@ class AssetChangeClass extends \classes\IndexClass
 
         //判断直推晋升条件是否满足
         $all_3 = new MemberModel();
-        $all_3 = $all_3->where('referee_id', '=', $referee_2->id)->whereIn('grade',  [4, 5])->count();
+        $all_3 = $all_3->where('referee_id', '=', $referee_2->id)->whereIn('grade', [4, 5])->count();
         if ($all_3 < $set['levelChairmanDirector']) return $referee;//不满足直推
 
         //计算团队业绩
@@ -680,14 +684,14 @@ class AssetChangeClass extends \classes\IndexClass
         if ($withdraw != $data['withdraw']) parent::ajax_exception(000, '请刷新重试（withdraw）');
 
         //验证倍数信息
-        if ($number < $data['base']) parent::ajax_exception(000, '提现金额必须大于：'.$data['base']);
-        if (!empty(($number % $data['times']))) parent::ajax_exception(000, '提现金额必须是『'.$data['times'].'』的倍数');
+        if ($number < $data['base']) parent::ajax_exception(000, '提现金额必须大于：' . $data['base']);
+        if (!empty(($number % $data['times']))) parent::ajax_exception(000, '提现金额必须是『' . $data['times'] . '』的倍数');
 
         Db::startTrans();
 
         //修改会员信息
         $model = new MemberModel();
-        $model = $model->where('id','=',$member['id'])->find();
+        $model = $model->where('id', '=', $member['id'])->find();
         $model->remind -= $number;
         $model->save();
 
@@ -716,7 +720,7 @@ class AssetChangeClass extends \classes\IndexClass
         $record->account = $model->account;
         $record->nickname = $model->nickname;
         $record->remind = 0 - $number;
-        $record->content = '提现扣除余额『' . $number.'』';
+        $record->content = '提现扣除余额『' . $number . '』';
         $record->integral_now = $model->integral;
         $record->integral_all = $model->integral_all;
         $record->remind_now = $model->remind;
@@ -768,18 +772,18 @@ class AssetChangeClass extends \classes\IndexClass
         if (md5($data['pay_pass']) != $member['pay_pass']) parent::ajax_exception(000, '支付密码输入错误');
 
         $welfare = new WelfareModel();
-        $welfare = $welfare->where('id','=',$data['id'])->find();
-        if (is_null($welfare))parent::ajax_exception(000, '请刷新重试(we)');
-        if ($welfare->total != $data['total'])parent::ajax_exception(000, '请刷新重试(we)');
+        $welfare = $welfare->where('id', '=', $data['id'])->find();
+        if (is_null($welfare)) parent::ajax_exception(000, '请刷新重试(we)');
+        if ($welfare->total != $data['total']) parent::ajax_exception(000, '请刷新重试(we)');
 
         Db::startTrans();
 
         //修改会员信息
         $model = new MemberModel();
-        $model = $model->where('id','=',$member['id'])->find();
+        $model = $model->where('id', '=', $member['id'])->find();
         $model->total -= $data['total'];
 
-        if ($model->total < 0)parent::ajax_exception(000, '累计收入不足');
+        if ($model->total < 0) parent::ajax_exception(000, '累计收入不足');
         $model->save();
 
         //建立订单
@@ -803,7 +807,7 @@ class AssetChangeClass extends \classes\IndexClass
         $record->account = $model->account;
         $record->nickname = $model->nickname;
         $record->total = 0 - $welfare->total;
-        $record->content = '兑换福利奖『'.$welfare->name.'』扣除累计收入『' . $welfare->total.'』';
+        $record->content = '兑换福利奖『' . $welfare->name . '』扣除累计收入『' . $welfare->total . '』';
         $record->integral_now = $model->integral;
         $record->integral_all = $model->integral_all;
         $record->remind_now = $model->remind;
