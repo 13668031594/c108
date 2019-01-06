@@ -165,7 +165,7 @@ class MemberClass extends AdminClass implements ListInterface
         if (empty($referee_account)) return $member;
 
         $test = new MemberModel();
-        $referee = $test->where('id', '=', $request->post('referee'))->find();
+        $referee = $test->where('account', '=', $request->post('referee'))->find();
         if (is_null($referee)) parent::ajax_exception(503, '上级不存在');
 
         $referee = $referee->getData();

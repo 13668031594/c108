@@ -35,7 +35,7 @@ class AssetchangeController extends \app\http\controller\IndexController
     {
         Db::startTrans();
 
-        $result = $this->class->validator_exchange($request);
+        $this->class->validator_exchange($request);
 
         Db::commit();
 

@@ -50,7 +50,7 @@ class MemberModel extends Model
         '2' => '经销商',
         '3' => '代理',
         '4' => '总监',
-        '5' => '股东',
+        '5' => '董事',
     ];
 
     public $statuses = [

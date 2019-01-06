@@ -528,7 +528,7 @@ class AssetChangeClass extends \classes\IndexClass
 
         //判断直推晋升条件是否满足
         $all_3 = new MemberModel();
-        $all_3 = $all_3->where('referee_id', '=', $referee->id)->where('grade', '=', [3, 4, 5])->count();
+        $all_3 = $all_3->where('referee_id', '=', $referee->id)->whereIn('grade',  [3, 4, 5])->count();
         if ($all_3 < $set['levelDirectorAgent']) return $referee;//不满足直推
 
         //计算团队业绩
@@ -569,7 +569,7 @@ class AssetChangeClass extends \classes\IndexClass
 
         //判断直推晋升条件是否满足
         $all_3 = new MemberModel();
-        $all_3 = $all_3->where('referee_id', '=', $referee_2->id)->where('grade', '=', [4, 5])->count();
+        $all_3 = $all_3->where('referee_id', '=', $referee_2->id)->whereIn('grade',  [4, 5])->count();
         if ($all_3 < $set['levelChairmanDirector']) return $referee;//不满足直推
 
         //计算团队业绩
