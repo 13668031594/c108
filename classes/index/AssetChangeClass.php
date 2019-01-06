@@ -564,7 +564,7 @@ class AssetChangeClass extends \classes\IndexClass
         //继续判断上级
         if (empty($referee->referee_id)) return $referee;
         $referee_2 = new MemberModel();
-        $referee_2 = $referee_2->where('id', '=', $referee->referee_id)->whereIn('grade', '=', 4)->find();
+        $referee_2 = $referee_2->where('id', '=', $referee->referee_id)->where('grade', '=', 4)->find();
         if (is_null($referee_2)) return $referee;
 
         //判断直推晋升条件是否满足
