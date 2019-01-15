@@ -26,7 +26,6 @@ class SystemClass extends AdminClass
         'levelBusinessAgent' => '经销商升代理',
     ];
 
-
     public function __construct()
     {
         $this->storage = new StorageClass('sysSetting.txt');

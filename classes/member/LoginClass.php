@@ -355,7 +355,7 @@ class LoginClass extends IndexClass
 
         //发送短信
 //        $result = $class->sendSms($phone, $code, $templateCode);
-        $content = '【肽雅丽】';
+        $content = '【肽雅丽菲】';
         switch ($type) {
             case 'reset':
                 $content .= '您正在使用手机找回密码';
