@@ -20,7 +20,7 @@ class AlipayController extends \app\http\controller\IndexController
     public function pay()
     {
         //验证登录
-        $this->classes->is_login();
+//        $this->classes->is_login();
 
         //进行支付
         $this->classes->pay();
