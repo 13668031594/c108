@@ -397,11 +397,7 @@ class AopClient {
 			//拼接表单字符串
 			return $this->buildRequestForm($totalParams);
 		}
-
-
 	}
-
-
 
 	/**
      * 建立请求，以表单HTML形式构造（默认）
@@ -427,7 +423,6 @@ class AopClient {
 		
 		return $sHtml;
 	}
-
 
 	public function execute($request, $authToken = null, $appInfoAuthtoken = null) {
 

@@ -14,25 +14,25 @@ use classes\vendor\StorageClass;
 class AlipayClass extends \classes\IndexClass
 {
     public $member;
+    private $alipay;
 
     public function __construct()
     {
         $this->member = parent::member();
+        $this->alipay = new AliPay();
     }
 
     public function pay()
     {
-        $alipay = new AliPay();
-
-        $alipay->pay();
+        return $this->alipay->pay();
     }
 
     public function notify()
     {
-        $str = request()->get();
+       $result = $this->alipay->notify();
 
-        $storage = new StorageClass('alipay.txt');
+       dump($result);
 
-        $storage->save(json_encode($str,JSON_UNESCAPED_UNICODE));
+       exit('ooxx');
     }
 }

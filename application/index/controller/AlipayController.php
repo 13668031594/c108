@@ -23,7 +23,9 @@ class AlipayController extends \app\http\controller\IndexController
 //        $this->classes->is_login();
 
         //进行支付
-        $this->classes->pay();
+        $result = $this->classes->pay();
+        exit($result);
+        return parent::success('/', $result);
     }
 
     public function notify()
