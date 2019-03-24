@@ -4,6 +4,7 @@ namespace app\member\controller;
 
 use app\http\controller\IndexController;
 use classes\member\LoginClass;
+use classes\vendor\AliPay;
 use think\Db;
 use think\Request;
 
@@ -148,5 +149,12 @@ class LoginController extends IndexController
         $this->class->reset();
 
         return parent::success();
+    }
+
+    public function test(){
+
+        $class = new AliPay();
+
+        $class->pay();
     }
 }

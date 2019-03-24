@@ -18,6 +18,7 @@ use app\trade\model\TradeModel;
 use app\welfare\model\WelfareModel;
 use app\withdraw\model\WithdrawModel;
 use classes\system\SystemClass;
+use classes\vendor\AliPay;
 use think\Db;
 use think\Request;
 

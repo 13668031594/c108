@@ -23,6 +23,7 @@ use app\withdraw\model\WithdrawModel;
 use classes\goods\GoodsClass;
 use classes\member\MemberClass;
 use classes\system\SystemClass;
+use classes\vendor\AliPay;
 use classes\welfare\WelfareClass;
 use think\Image;
 
@@ -525,5 +526,13 @@ class IndexClass extends \classes\IndexClass
         foreach ($list['message'] as &$v) $v['status'] = $status[$v['status']];
 
         return $list;
+    }
+
+    public function test()
+    {
+        $alipay = new AliPay();
+        $alipay->pay();
+
+        exit('ojbk');
     }
 }

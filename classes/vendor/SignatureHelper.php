@@ -20,6 +20,7 @@ class SignatureHelper {
      * @return bool|\stdClass 返回API接口调用结果，当发生错误时返回false
      */
     public function request($accessKeyId, $accessKeySecret, $domain, $params, $security=false) {
+
         $apiParams = array_merge(array (
             "SignatureMethod" => "HMAC-SHA1",
             "SignatureNonce" => uniqid(mt_rand(0,0xffff), true),
