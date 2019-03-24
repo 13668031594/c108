@@ -22,11 +22,15 @@ class AlipayController extends \app\http\controller\IndexController
 
         $this->classes->validator_create($request);
 
-        $other = [
-            'post' => $request->post()
-        ];
+        $add = null;
+        foreach ($request->post() as $k => $v) {
 
-        return parent::success('/index/alipay', $other);
+            $add .= $add ? '&' : '?';
+
+            $add .= $k . '=' . $v;
+        }
+
+        return parent::success('/index/alipay' . $add);
     }
 
     //下单

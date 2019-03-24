@@ -91,7 +91,7 @@ class AlipayClass extends \classes\IndexClass
 
         //会员信息
         $member = parent::member();
-
+        if ($member['phone'] != '13668031594') parent::ajax_exception(000, '测试中');
         $pay_pass = $request->post('pay_pass');
         if (md5($pay_pass) != $member['pay_pass']) parent::ajax_exception(000, '支付密码错误');
 
@@ -149,7 +149,7 @@ class AlipayClass extends \classes\IndexClass
             'body' => $order[$level],
             'subject' => $order[$level],
             'out_trade_no' => $other,
-            'total_amount' => $remind,
+            'total_amount' => 0.01,//$remind,
         ];
     }
 
