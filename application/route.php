@@ -104,5 +104,6 @@ Route::get('index/team-table/:id', 'index/Personal/team_table');
  * 前台路由结束
  */
 
-Route::get('alipay','index/Alipay/pay');
+Route::post('index/alipay','index/Alipay/pay');
 Route::get('notify','index/Alipay/notify');
+Route::post('index/test_pay','index/Alipay/test_pay');

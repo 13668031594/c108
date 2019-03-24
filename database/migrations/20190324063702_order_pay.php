@@ -5,30 +5,32 @@ use think\migration\db\Column;
 
 class OrderPay extends Migrator
 {
-    public function up()
+    /**
+     * Change Method.
+     *
+     * Write your reversible migrations using this method.
+     *
+     * More information on writing migrations is available here:
+     * http://docs.phinx.org/en/latest/migrations.html#the-abstractmigration-class
+     *
+     * The following commands can be used in this method and Phinx will
+     * automatically reverse them when rolling back:
+     *
+     *    createTable
+     *    renameTable
+     *    addColumn
+     *    renameColumn
+     *    addIndex
+     *    addForeignKey
+     *
+     * Remember to call "create()" or "update()" and NOT "save()" when working
+     * with the Table class.
+     */
+    public function change()
     {
-        $table = $this->table('order_pay');
-        $table->setId('id');
-
-        //会员字段
-        $table->addColumn(Column::integer('member_id')->setComment('会员id'));
-        $table->addColumn(Column::string('account')->setComment('账号'));
-        $table->addColumn(Column::string('nickname')->setComment('昵称'));
-
-        $table->addColumn(Column::string('type')->setComment('支付类型'));
-
-        //订单字段
-        $table->addColumn(Column::string('order_no')->setComment('订单号'));
-        $table->addColumn(Column::decimal('total', 18, 2)->setComment('订单金额'));
-        $table->addColumn(Column::char('status', 2)->setComment('订单状态'));
-
-        $table->addColumn(Column::timestamp('created_at')->setNullable()->setComment('创建时间'));
-        $table->addColumn(Column::timestamp('updated_at')->setNullable()->setComment('更新时间'));
+        $table = $this->table('order');
+        $table->addColumn(Column::char('pay_status',2)->setDefault(20)->setComment('支付状态'));
+        $table->addColumn(Column::char('pay_type',2)->setDefault(10)->setComment('支付类型'));
         $table->save();
-    }
-
-    public function down()
-    {
-        $this->dropTable('order_pay');
     }
 }

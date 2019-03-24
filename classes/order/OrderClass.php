@@ -38,6 +38,7 @@ class OrderClass extends AdminClass
         if (!empty($account)) {
             $where['member_account|member_phone'] = ['like', '%' . $account . '%'];
         }
+        $where['pay_status'] = ['=', 20];
 
         return parent::page($this->model, ['where' => $where]);
     }

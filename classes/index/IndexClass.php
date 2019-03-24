@@ -20,7 +20,6 @@ use app\welfare\model\WelfareContentModel;
 use app\welfare\model\WelfareImagesModel;
 use app\welfare\model\WelfareModel;
 use app\withdraw\model\WithdrawModel;
-use classes\goods\GoodsClass;
 use classes\member\MemberClass;
 use classes\system\SystemClass;
 use classes\vendor\AliPay;

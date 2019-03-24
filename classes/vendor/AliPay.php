@@ -19,7 +19,6 @@ class AliPay extends FirstClass
         'signType' => 'RSA2',
     ];
 
-
     public function __construct()
     {
         include dirname(__FILE__) . '/alipay/AopSdk.php';
@@ -39,7 +38,7 @@ class AliPay extends FirstClass
         $data = [
             'body' => isset($param['body']) ? $param['body'] : '订单描述',
             'subject' => isset($param['subject']) ? $param['subject'] : '订单名称',
-            'out_trade_no' => isset($param['out_trade_no']) ? $param['out_trade_no'] : time(),
+            'out_trade_no' => isset($param['out_trade_no']) ? ($param['out_trade_no'] . '_' . time()) : time(),
             'timeout_express' => isset($param['timeout_express']) ? $param['timeout_express'] : '90m',
             'total_amount' => isset($param['total_amount']) ? $param['total_amount'] : '0.01',
             'product_code' => 'QUICK_WAP_WAY',
@@ -54,8 +53,9 @@ class AliPay extends FirstClass
         $aop->postCharset = 'utf-8';
         $aop->format = 'json';
         $aop->signType = $this->set['signType'];
-        $request = new \AlipayTradeWapPayRequest();
+        $request = new \AlipayTradeAppPayRequest();
         $request->setReturnUrl('http://www.ahu66.com/notify');
+        $request->setNotifyUrl('http://www.ahu66.com/notify');
         $request->setBizContent(json_encode($data));
         $result = $aop->pageExecute($request);
         return $result;
@@ -67,6 +67,6 @@ class AliPay extends FirstClass
 
         $aop->alipayrsaPublicKey = $this->set['alipayrsaPublicKey'];
 
-        return $aop->rsaCheckV1($param, null, $this->set['signType']);
+        $aop->rsaCheckV1($param, null, $this->set['signType']);
     }
 }
