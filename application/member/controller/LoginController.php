@@ -161,7 +161,7 @@ class LoginController extends IndexController
 
     public function notify()
     {
-        $a = new StorageClass('notify');
+        $a = new StorageClass('notify.txt');
 
         $a->save('1231233');
 
