@@ -55,6 +55,6 @@ class AlipayController extends \app\http\controller\IndexController
         //验证回调情况
         $this->classes->notify();
 
-        exit('支付成功');
+        parent::view('success');
     }
 }
