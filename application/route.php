@@ -104,4 +104,4 @@ Route::get('index/team-table/:id', 'index/Personal/team_table');
  * 前台路由结束
  */
 
-Route::test();
+//Route::test();
