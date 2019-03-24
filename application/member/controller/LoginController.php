@@ -4,10 +4,7 @@ namespace app\member\controller;
 
 use app\http\controller\IndexController;
 use classes\member\LoginClass;
-use classes\vendor\AliPay;
-use classes\vendor\StorageClass;
 use think\Db;
-use think\Request;
 
 class LoginController extends IndexController
 {
@@ -150,21 +147,5 @@ class LoginController extends IndexController
         $this->class->reset();
 
         return parent::success();
-    }
-
-    public function test()
-    {
-        $class = new AliPay();
-
-        $class->pay();
-    }
-
-    public function notify()
-    {
-        $a = new StorageClass('notify.txt');
-
-        $a->save('1231233');
-
-        exit('ok');
     }
 }

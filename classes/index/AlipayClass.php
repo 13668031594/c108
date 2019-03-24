@@ -9,6 +9,7 @@
 namespace classes\index;
 
 use classes\vendor\AliPay;
+use classes\vendor\StorageClass;
 
 class AlipayClass extends \classes\IndexClass
 {
@@ -28,6 +29,10 @@ class AlipayClass extends \classes\IndexClass
 
     public function notify()
     {
+        $str = request()->get();
 
+        $storage = new StorageClass('alipay.txt');
+
+        $storage->save(json_encode($str,JSON_UNESCAPED_UNICODE));
     }
 }
