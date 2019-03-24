@@ -29,7 +29,7 @@ class AlipayClass extends \classes\IndexClass
 
     public function notify()
     {
-       $result = $this->alipay->notify();
+       $result = $this->alipay->notify(request()->get());
 
        dump($result);
 
