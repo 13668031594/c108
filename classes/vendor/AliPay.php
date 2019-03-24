@@ -53,7 +53,7 @@ class AliPay extends FirstClass
         $aop->postCharset = 'utf-8';
         $aop->format = 'json';
         $aop->signType = $this->set['signType'];
-        $request = new \AlipayTradeAppPayRequest();
+        $request = new \AlipayTradeWapPayRequest();
         $request->setReturnUrl('http://www.ahu66.com/notify');
         $request->setNotifyUrl('http://www.ahu66.com/notify');
         $request->setBizContent(json_encode($data));

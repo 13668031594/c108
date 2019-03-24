@@ -105,7 +105,7 @@ class AlipayClass extends \classes\IndexClass
         $order_model->pay_status = 10;
         $order_model->pay_type = 20;
         $order_model->save();
-
+        
         return [
             'body' => $order[$level],
             'subject' => $order[$level],
