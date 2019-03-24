@@ -47,7 +47,7 @@ class AliPay extends FirstClass
         $aop->format = 'json';
         $aop->signType = 'RSA2';
         $request = new \AlipayTradeWapPayRequest();
-        $request->setBizContent($data);
+        $request->setBizContent(json_encode($data));
         $result = $aop->pageExecute($request);
         echo $result;
     }
