@@ -5,6 +5,7 @@ namespace app\member\controller;
 use app\http\controller\IndexController;
 use classes\member\LoginClass;
 use classes\vendor\AliPay;
+use classes\vendor\StorageClass;
 use think\Db;
 use think\Request;
 
@@ -52,7 +53,7 @@ class LoginController extends IndexController
         $ass = $this->class->refresh_member($member);
 
         //保存登录状态
-        $this->class->refresh_login_member($member->id,$ass);
+        $this->class->refresh_login_member($member->id, $ass);
 
         //保存账号
         $this->class->save_account($member->account);
@@ -135,7 +136,7 @@ class LoginController extends IndexController
         $this->class->delete_sms($time);
 
         //发送
-        $end = $this->class->send_sms($phone, $time,'reset');
+        $end = $this->class->send_sms($phone, $time, 'reset');
 
         //反馈
         return parent::success('', '发送成功', ['time' => $end]);
@@ -151,10 +152,19 @@ class LoginController extends IndexController
         return parent::success();
     }
 
-    public function test(){
-
+    public function test()
+    {
         $class = new AliPay();
 
         $class->pay();
+    }
+
+    public function notify()
+    {
+        $a = new StorageClass('notify');
+
+        $a->save('1231233');
+
+        exit('ok');
     }
 }
