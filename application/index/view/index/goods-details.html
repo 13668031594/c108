@@ -158,24 +158,25 @@
         $.confirm("确定要执行此操作吗？", function () {
             // 0 余额 1 支付宝 2微信
             var payType = $("input[name=pay]:checked").val();
-            var callback = null ;
+            var callback = null;
             // 判断支付方式
-            switch (payType){
+            switch (payType) {
                 case "0":
-                    console.log('dd') ;
-                    $('#forms').attr('action','/index/exchange');
+                    console.log('dd');
+                    $('#forms').attr('action', '/index/exchange');
                     break;
                 case "1":
-                    $('#forms').attr('action','/index/test_pay');
-                    callback = function(res){
-                        console.log(res) ;
+                    $('#forms').attr('action', '/index/test_pay');
+                    callback = function (res) {
+                        console.log(res);
+                        window.location.href = res.url;
                     }
                     break;
                 case "2":
                     break;
             }
             //点击确认后的回调函数
-            Ajax($('#forms'),callback);
+            Ajax($('#forms'), callback);
         }, function () {
             //点击取消后的回调函数
         });
