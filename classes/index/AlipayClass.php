@@ -92,11 +92,11 @@ class AlipayClass extends \classes\IndexClass
         //会员信息
         $member = parent::member();
         if ($member['phone'] != '13668031594') parent::ajax_exception(000, '测试中');
-        $pay_pass = $request->post('pay_pass');
+        $pay_pass = $request->get('pay_pass');
         if (md5($pay_pass) != $member['pay_pass']) parent::ajax_exception(000, '支付密码错误');
 
         //获取报单等级和单价
-        $radio = $request->post('radio');
+        $radio = $request->get('radio');
         list($level, $remind) = explode('|', $radio);
 
         //初始化设置类
@@ -137,9 +137,9 @@ class AlipayClass extends \classes\IndexClass
         $order_model->member_account = $member['account'];
         $order_model->member_nickname = $member['nickname'];
         $order_model->member_phone = $member['phone'];
-        $order_model->man = $request->post('man');
-        $order_model->phone = $request->post('phone');
-        $order_model->address = $request->post('address');
+        $order_model->man = $request->get('man');
+        $order_model->phone = $request->get('phone');
+        $order_model->address = $request->get('address');
         $order_model->created_at = $this->date;
         $order_model->pay_status = 10;
         $order_model->pay_type = 20;
