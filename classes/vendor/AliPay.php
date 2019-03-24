@@ -33,7 +33,7 @@ class AliPay extends FirstClass
             'subject' => isset($param['subject']) ? $param['subject'] : '订单名称',
             'out_trade_no' => isset($param['out_trade_no']) ? $param['out_trade_no'] : time(),
             'timeout_express' => isset($param['timeout_express']) ? $param['timeout_express'] : '90m',
-            'total_amount' => isset($param['total_amount']) ? $param['total_amount'] : '0.01 ',
+            'total_amount' => isset($param['total_amount']) ? $param['total_amount'] : '0.01',
             'product_code' => 'QUICK_WAP_WAY',
         ];
 
