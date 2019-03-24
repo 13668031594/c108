@@ -67,6 +67,6 @@ class AliPay extends FirstClass
 
         $aop->alipayrsaPublicKey = $this->set['alipayrsaPublicKey'];
 
-        $aop->rsaCheckV1($param, null, $this->set['signType']);
+        return $aop->rsaCheckV1($param, null, $this->set['signType']);
     }
 }
