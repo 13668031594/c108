@@ -17,7 +17,7 @@
     <div class="swiper-container" style="width: 100%;">
         <div class="swiper-wrapper">
             {foreach $images as $v}
-            <div class="swiper-slide" data-swiper-autoplay="2000"><img src="{$v['location']}" >
+            <div class="swiper-slide" data-swiper-autoplay="2000"><img src="{$v['location']}">
             </div>
             {/foreach}
         </div>
@@ -51,38 +51,66 @@
             <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">确认支付</button>
         </div>-->
     </div>
-    <form id="forms" action="/index/alipay" method="post">
+    <form id="forms" action="/index/exchange" method="post">
         <input type="hidden" name="radio" value="{$self['code']}|{$self['amount']}">
-    <div class="weui-cells weui-cells_form">
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">收货人</label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" type="text" name="man" id='man' value="" placeholder="请输入收货人">
-            </div>
-        </div>
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" type="text" name="phone" id='phone' value="" placeholder="请输入收货联系电话">
-            </div>
-        </div>
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">收货地址</label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" type="text" name="address" id='address' value="" placeholder="请输入收货地址">
-            </div>
-        </div>
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">支付密码</label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" type="password" name="pay_pass" id='payPass' value="" placeholder="请输入支付密码">
-            </div>
-        </div>
-    </div>
+        <div class="weui-cells weui-cells_form">
 
-    <div class="form-btn">
-        <button class="weui-btn weui-btn_primary" id="orderSubmit" type="submit">确认下单</button>
-    </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">收货人</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="man" id='man' value="" placeholder="请输入收货人">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="phone" id='phone' value="" placeholder="请输入收货联系电话">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">收货地址</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="address" id='address' value="" placeholder="请输入收货地址">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">支付密码</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="password" name="pay_pass" id='payPass' value=""
+                           placeholder="请输入支付密码">
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="weui-cells__title">支付方式</div>
+        <div class="weui-cells weui-cells_radio">
+            <label class="weui-cell weui-check__label" for="x11">
+                <div class="weui-cell__bd">
+                    <p>余额</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" name="pay" id="x11" value="0">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+            <label class="weui-cell weui-check__label" for="x12">
+
+                <div class="weui-cell__bd">
+                    <p>支付宝</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" name="pay" class="weui-check" id="x12" checked="checked" value="1">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+        </div>
+
+        <div class="form-btn">
+            <button class="weui-btn weui-btn_primary" id="orderSubmit" type="submit">确认下单</button>
+        </div>
     </form>
 </div>
 {include file="index@Index/floor"}
@@ -102,35 +130,53 @@
         centeredSlides: true,
     });
 
-    $('.icon-fanhui').on('click', function(){
+    $('.icon-fanhui').on('click', function () {
         location.href = '/';
     });
 
-    $('#forms').off('submit').on('submit', function(){
-        var payPass = $("#payPass").val() ;
-        var man = $("#man").val() ;
-        var phone = $("#phone").val() ;
-        var address = $("#address").val() ;
-        if( !address ){
+    $('#forms').off('submit').on('submit', function () {
+        var payPass = $("#payPass").val();
+        var man = $("#man").val();
+        var phone = $("#phone").val();
+        var address = $("#address").val();
+        if (!address) {
             $.alert('请输入收货地址');
-            return false ;
+            return false;
         }
-        if( !phone ){
+        if (!phone) {
             $.alert('请输入联系电话');
-            return false ;
+            return false;
         }
-        if( !man ){
+        if (!man) {
             $.alert('请输入收货人姓名');
-            return false ;
+            return false;
         }
-        if( !payPass ){
+        if (!payPass) {
             $.alert('请输入支付密码');
-            return false ;
+            return false;
         }
-        $.confirm("确定要执行此操作吗？", function() {
+        $.confirm("确定要执行此操作吗？", function () {
+            // 0 余额 1 支付宝 2微信
+            var payType = $("input[name=pay]:checked").val();
+            var callback = null ;
+            // 判断支付方式
+            switch (payType){
+                case "0":
+                    console.log('dd') ;
+                    $('#forms').attr('action','/index/exchange');
+                    break;
+                case "1":
+                    $('#forms').attr('action','/index/test_pay');
+                    callback = function(res){
+                        console.log(res) ;
+                    }
+                    break;
+                case "2":
+                    break;
+            }
             //点击确认后的回调函数
-            Ajax($('#forms'));
-        }, function() {
+            Ajax($('#forms'),callback);
+        }, function () {
             //点击取消后的回调函数
         });
         return false;
