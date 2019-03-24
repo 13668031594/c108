@@ -22,7 +22,7 @@ class AlipayController extends \app\http\controller\IndexController
 
         $this->classes->validator_create($request);
 
-        parent::success('/index/alipay');
+        return parent::success('/index/alipay');
     }
 
     //下单
