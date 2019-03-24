@@ -105,5 +105,5 @@ Route::get('index/team-table/:id', 'index/Personal/team_table');
  */
 
 Route::post('index/test_pay','index/Alipay/test');//验证支付
-Route::post('index/alipay','index/Alipay/pay');//发起支付
+Route::get('index/alipay','index/Alipay/pay');//发起支付
 Route::get('notify','index/Alipay/notify');//回调地址

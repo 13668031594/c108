@@ -84,7 +84,7 @@ class AlipayClass extends \classes\IndexClass
         ];
 
         //验证
-        $result = parent::validator($request->post(), $rule);
+        $result = parent::validator($request->get(), $rule);
 
         //有错误报告则报错
         if (!is_null($result)) parent::ajax_exception(000, $result);
