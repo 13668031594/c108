@@ -33,6 +33,45 @@ class AlipayClass extends \classes\IndexClass
         $this->alipay = new AliPay();
     }
 
+    public function validator_create(Request $request)
+    {
+        //验证条件
+        $rule = [
+            'pay_pass|支付密码' => 'require|length:1,255',
+            'man|收货人' => 'require|length:1,255',
+            'phone|联系电话' => 'require|length:1,255',
+            'address|收货地址' => 'require|length:1,255',
+        ];
+
+        //验证
+        $result = parent::validator($request->post(), $rule);
+
+        //有错误报告则报错
+        if (!is_null($result)) parent::ajax_exception(000, $result);
+
+        //会员信息
+        $member = parent::member();
+
+        $pay_pass = $request->post('pay_pass');
+        if (md5($pay_pass) != $member['pay_pass']) parent::ajax_exception(000, '支付密码错误');
+
+        //获取报单等级和单价
+        $radio = $request->post('radio');
+        list($level, $remind) = explode('|', $radio);
+
+        //初始化设置类
+        $class = new SystemClass();
+
+        //获取升级后的等级
+        $after = $class->get_grade($level, $member['grade']);
+        if ($after === false) parent::ajax_exception(000, '请刷新重试1');
+
+        //判断单价是否相等
+        $set = $class->index();
+        if ($remind != $set[$level]) parent::ajax_exception(000, '请刷新重试2');
+    }
+
+
     //报单验证
     public function create_order(Request $request)
     {
@@ -127,7 +166,7 @@ class AlipayClass extends \classes\IndexClass
 
         //验签
         $result = $this->alipay->notify($param);
-//        if (!$result) parent::ajax_exception(000, '验证失败');
+        if (!$result) parent::ajax_exception(000, '验证失败');
 
         list($order_number) = explode('_', $param['out_trade_no']);
 
@@ -525,9 +564,9 @@ class AlipayClass extends \classes\IndexClass
         $order_number = $request->post('order_number');
 
         $order_model = new OrderModel();
-        $order_model = $order_model->where('order_number', '=', $order_number)->where('member_id','=',$member['id'])->find();
+        $order_model = $order_model->where('order_number', '=', $order_number)->where('member_id', '=', $member['id'])->find();
 
-        if (!is_null($order_model) && ($order_model->pay_status == 20))return 'success';
+        if (!is_null($order_model) && ($order_model->pay_status == 20)) return 'success';
 
         return 'failes';
     }
