@@ -149,7 +149,7 @@ class AlipayClass extends \classes\IndexClass
             'body' => $order[$level],
             'subject' => $order[$level],
             'out_trade_no' => $other,
-            'total_amount' => 0.01,//$remind,
+            'total_amount' => $remind,
         ];
     }
 
