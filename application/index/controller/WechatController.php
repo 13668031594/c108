@@ -6,6 +6,7 @@ use classes\index\AlipayClass;
 use classes\index\PayClass;
 use classes\index\WechatClass;
 use classes\index\WechatPayClass;
+use classes\vendor\StorageClass;
 use think\Request;
 
 class WechatController extends \app\http\controller\IndexController
@@ -60,6 +61,8 @@ return $result;
     //回调
     public function notify()
     {
+        $storage = new StorageClass('wechat_notify.txt');
+        $storage->save('123123');
         //验证回调情况
         $order_number = $this->classes->notify();
 
