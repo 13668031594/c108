@@ -163,8 +163,7 @@ class AlipayClass extends \classes\IndexClass
     public function notify()
     {
         $param = request()->get();
-dump($param);
-exit;
+
         //验签
         $result = $this->alipay->notify($param);
         if (!$result) parent::ajax_exception(000, '验证失败');
