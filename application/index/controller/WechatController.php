@@ -2,11 +2,8 @@
 
 namespace app\index\controller;
 
-use classes\index\AlipayClass;
 use classes\index\PayClass;
-use classes\index\WechatClass;
 use classes\index\WechatPayClass;
-use classes\vendor\StorageClass;
 use think\Request;
 
 class WechatController extends \app\http\controller\IndexController
@@ -34,7 +31,7 @@ class WechatController extends \app\http\controller\IndexController
             $add .= $k . '=' . $v;
         }
 
-        return parent::success('/index');
+        return parent::success('/index/wechat' . $add);
     }
 
     //下单
