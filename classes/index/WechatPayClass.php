@@ -149,8 +149,8 @@ class WechatPayClass extends \classes\IndexClass
             'body' => $order[$level],
             'subject' => $order[$level],
             'out_trade_no' => $other,
-//            'total_fee' => floor($remind * 100),
-            'total_fee' => 1,
+            'total_fee' => floor($remind * 100),
+//            'total_fee' => 1,
         ];
     }
 
