@@ -3,6 +3,7 @@
 namespace app\index\controller;
 
 use classes\index\AlipayClass;
+use classes\index\PayClass;
 use think\Request;
 
 class AlipayController extends \app\http\controller\IndexController
@@ -44,7 +45,7 @@ class AlipayController extends \app\http\controller\IndexController
 
         //进行支付
         $result = $this->classes->pay($param);
-        exit($result);
+
         //返回表单
         return parent::success('/', $result);
     }
@@ -53,7 +54,12 @@ class AlipayController extends \app\http\controller\IndexController
     public function notify()
     {
         //验证回调情况
-        $this->classes->notify();
+        $order_number = $this->classes->notify();
+
+        $payClass = new PayClass();
+
+        //完结订单
+        $payClass->over_order($order_number);
 
         return parent::view('success');
     }
