@@ -54,7 +54,7 @@ class WechatPay extends FirstClass
             'body' => $order['body'],
             'out_trade_no' => $order['out_trade_no'] . '_' . time(),
             'total_fee' => $order['total_fee'],
-            'spbill_create_ip' => $this->location_ip,
+            'spbill_create_ip' => $_SERVER['REMOTE_ADDR'],
             'notify_url' => 'http://' . $this->location . '/notify_wechat',
             'trade_type' => $trade_type,
         ];

@@ -49,7 +49,7 @@ class WechatController extends \app\http\controller\IndexController
         $result = $this->classes->pay($param);
 //        dump($result);
 //        exit;
-        return redirect($result['mweb_url'].'&redirect_url=http%3A%2F%2Fwww.ahu66.com/notify_wechat',302);
+        return redirect($result['mweb_url'],302);
         exit();
         return url($result['mweb_url'].'&redirect_url=http%3A%2F%2Fwww.ahu66.com/notify_wechat');
 return $result;
