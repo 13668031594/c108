@@ -30,7 +30,7 @@ class PayClass extends \classes\IndexClass
         //报单记录
         $order_model = new OrderModel();
         $order_model = $order_model->where('order_number', '=', $order_number)->where('pay_type', '=', 20)->where('pay_status', '=', 10)->find();
-        if (is_null($order_model)) parent::ajax_exception(000, '订单信息错误');
+        if (is_null($order_model)) exit('订单信息错误');//parent::ajax_exception(000, '订单信息错误');
         $order_model->pay_status = 20;
         $order_model->save();
 
