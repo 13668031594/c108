@@ -208,7 +208,8 @@ class WechatPay extends FirstClass
 
         //转为array
         $array = self::xml_to_array($xml);
-
+        $storage = new StorageClass('wechat_notify.txt');
+        $storage->save($xml);
         //判断
         if (($array['return_code'] == 'SUCCESS') && ($array['result_code'] == 'SUCCESS')) {
 
