@@ -178,14 +178,26 @@
                     $('#forms').attr('action', '/index/test_pay');
                     callback = function (res) {
                         console.log(res);
-                        window.location.href = res.url;
+                        if(res.status == 'success'){
+
+                            window.location.href = res.url;
+                        }else {
+
+                            $.alert(res.message);
+                        }
                     };
                     break;
                 case "2":
                     $('#forms').attr('action', '/index/test_wechat');
                     callback = function (res) {
                         console.log(res);
-                        window.location.href = res.url;
+                        if(res.status == 'success'){
+
+                            window.location.href = res.url;
+                        }else {
+
+                            $.alert(res.message);
+                        }
                     };
                     break;
             }
