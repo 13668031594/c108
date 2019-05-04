@@ -34,7 +34,7 @@ class WechatController extends \app\http\controller\IndexController
             $add .= $k . '=' . $v;
         }
 
-        return parent::success('/index/wechat');
+        return parent::success('/index/wechat' . $add);
     }
 
     //下单

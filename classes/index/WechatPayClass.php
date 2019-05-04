@@ -35,7 +35,7 @@ class WechatPayClass extends \classes\IndexClass
     }
 
     public function validator_create(Request $request)
-    {
+    {parent::ajax_exception(000, '123123123');
         //验证条件
         $rule = [
             'pay_pass|支付密码' => 'require|length:1,255',
