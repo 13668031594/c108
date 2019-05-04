@@ -185,4 +185,17 @@ class AlipayClass extends \classes\IndexClass
 
         return 'failes';
     }
+
+    //新的订单号
+    private function new_order()
+    {
+        $order = 'o' . time() . rand(100, 999);
+
+        $model = new OrderModel();
+        $test = $model->where('order_number', '=', $order)->find();
+
+        if ($test) return self::new_order();
+
+        return $order;
+    }
 }
