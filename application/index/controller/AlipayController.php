@@ -45,7 +45,7 @@ class AlipayController extends \app\http\controller\IndexController
 
         //进行支付
         $result = $this->classes->pay($param);
-
+return $result;
         //返回表单
         return parent::success('/', $result);
     }
