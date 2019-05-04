@@ -110,5 +110,5 @@ Route::get('notify','index/Alipay/notify');//回调地址
 
 Route::post('index/test_wechat','index/Wechat/test');//验证支付
 Route::get('index/wechat','index/Wechat/pay');//发起支付
-Route::get('notify_wechat','index/Wechat/notify_test');//回调地址
+//Route::get('notify_wechat','index/Wechat/notify_test');//回调地址
 Route::post('notify_wechat','index/Wechat/notify');//回调地址
