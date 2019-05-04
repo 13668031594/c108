@@ -163,13 +163,11 @@ class WechatPayClass extends \classes\IndexClass
     //执行回调，并验证数据格式
     public function notify()
     {
-        $param = request()->get();
-
         //验签
-        $result = $this->alipay->notify($param);
+        $result = $this->alipay->notify();
         if (!$result) parent::ajax_exception(000, '验证失败');
 
-        list($order_number) = explode('_', $param['out_trade_no']);
+        list($order_number) = explode('_', $result['out_trade_no']);
 
         return $order_number;
     }

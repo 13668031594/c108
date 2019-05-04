@@ -8,7 +8,7 @@ class WechatPay extends FirstClass
 {
     private $url = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
     private $appid = 'wxa42540f7d160427e';
-    private $EncodingAESKey = '186f8b39fb8cd41c4b5a161cec13062b';
+    private $EncodingAESKey = '1cdf336760ef0dcb120f01bd22b04925';
     private $mch_id = '1529538981';
     private $location_ip = '39.108.53.9';
     private $location = 'www.ahu66.com';
@@ -133,7 +133,7 @@ class WechatPay extends FirstClass
         $result = self::url_post($this->url, $set);
 
         $result = self::xml_to_array($result);
-dump($result);
+
         return $result;
     }
 
@@ -143,7 +143,7 @@ dump($result);
      * @param $xml
      * @return mixed
      */
-    protected function xml_to_array($xml)
+    public function xml_to_array($xml)
     {
         //禁止引用外部xml实体
         libxml_disable_entity_loader(true);
@@ -157,7 +157,7 @@ dump($result);
      * @param $array
      * @return string
      */
-    protected function array_to_xml($array)
+    public function array_to_xml($array)
     {
         $xml = "<xml>\n";
 
@@ -184,7 +184,7 @@ dump($result);
      * @param $post_data
      * @return mixed
      */
-    protected function url_post($url, $post_data)
+    public function url_post($url, $post_data)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -199,5 +199,23 @@ dump($result);
         $output = curl_exec($ch);
         curl_close($ch);
         return $output;
+    }
+
+    public function notify()
+    {
+        //获取微信回调信息，xml格式
+        $xml = request()->getContent();
+
+        //转为array
+        $array = self::xml_to_array($xml);
+
+        //判断
+        if (($array['return_code'] == 'SUCCESS') && ($array['result_code'] == 'SUCCESS')) {
+
+            return $array;
+        }else{
+
+            exit('fails');
+        }
     }
 }
