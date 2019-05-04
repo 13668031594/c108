@@ -63,15 +63,15 @@ return $result;
         $payClass = new PayClass();
 
         //完结订单
-        $payClass->over_order($order_number);
+        $payClass->over_order($order_number,30);
 
         exit('success');
     }
 
     public function notify_test()
     {
-        $all = \request()->get();
-        dump($all);
-        exit;
+        $this->classes->test();
+
+        return parent::view('success');
     }
 }

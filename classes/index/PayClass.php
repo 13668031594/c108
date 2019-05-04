@@ -23,13 +23,13 @@ class PayClass extends \classes\IndexClass
     public $other;
     public $date;
 
-    public function over_order($order_number)
+    public function over_order($order_number,$pay_type = 10)
     {
         $this->member = parent::member();
 
         //报单记录
         $order_model = new OrderModel();
-        $order_model = $order_model->where('order_number', '=', $order_number)->where('pay_type', '=', 20)->where('pay_status', '=', 10)->find();
+        $order_model = $order_model->where('order_number', '=', $order_number)->where('pay_type', '=', $pay_type)->where('pay_status', '=', 10)->find();
         if (is_null($order_model)) exit('订单信息错误');//parent::ajax_exception(000, '订单信息错误');
         $order_model->pay_status = 20;
         $order_model->save();

@@ -59,7 +59,7 @@ return $result;
         $payClass = new PayClass();
 
         //完结订单
-        $payClass->over_order($order_number);
+        $payClass->over_order($order_number,20);
 
         return parent::view('success');
     }

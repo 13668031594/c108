@@ -142,7 +142,7 @@ class WechatPayClass extends \classes\IndexClass
         $order_model->address = $request->get('address');
         $order_model->created_at = $this->date;
         $order_model->pay_status = 10;
-        $order_model->pay_type = 20;
+        $order_model->pay_type = 30;
         $order_model->save();
 
         return [
@@ -197,5 +197,14 @@ class WechatPayClass extends \classes\IndexClass
         if ($test) return self::new_order();
 
         return $order;
+    }
+
+    public function test()
+    {
+        $order_number = \request()->get('order_number');
+
+        $order_model = new OrderModel();
+        $order_model = $order_model->where('order_number', '=', $order_number)->where('pay_type', '=', 30)->where('pay_status', '=', 20)->find();
+        if (is_null($order_model)) exit('支付失败');//parent::ajax_exception(000, '订单信息错误');
     }
 }
